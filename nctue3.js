@@ -1,4 +1,4 @@
-let id_ = 'ctl00_ContentPlaceHolder1_Stu_TeamDetailControl1_rpTeams_ctl03_lbTeamName';
+/*let id_ = 'ctl00_ContentPlaceHolder1_Stu_TeamDetailControl1_rpTeams_ctl03_lbTeamName';
 
 fetch('https://gamerslouis.github.io/nctue3.html').then((res) => {
     return res.text();
@@ -6,3 +6,4 @@ fetch('https://gamerslouis.github.io/nctue3.html').then((res) => {
 //	document.getElementById(id_).innerHTML +=content;
     });
 
+*/
