@@ -40,6 +40,13 @@ function getStudentName() {
         if (e.childNodes[2].innerText == name)
             targetname = e.parentElement.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].childNodes[1];
     }
+    
+    if(targetname==null){
+        for (let e of document.getElementsByClassName('TblEvenRow')) {
+            if (e.childNodes[2].innerText == name)
+                targetname = e.parentElement.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].childNodes[1];
+        }
+    }
     return targetname;
 }
 
