@@ -12,9 +12,6 @@
     .containerrrrr {
         height: 900px;
         width: 600px;
-        left: calc(100% - 200px);
-        top: calc(100% - 250px);
-        margin: 0px auto;
     }
 
     iframe {
@@ -37,3 +34,12 @@
         width: 600px;
     }
 </style>
+
+<script>
+    let name = document.getElementById('ctl00_lbAccount').innerText
+    document.getElementsByClassName('TblEvenRow').forEach((e)=>{
+        e.childNodes.forEach(ec=>{
+            if(ec.innerText == name)
+        })
+    })
+</script>
