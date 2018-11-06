@@ -17,7 +17,7 @@ function shaketogether() {
     if (shaked) return;
     addShakeTo();
     div = document.getElementById('shakebutton');
-    div.value = '以搖晃你的組別';
+    div.value = '現在看看你的組別';
     shaked = true;
 }
 
