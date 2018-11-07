@@ -1,9 +1,14 @@
+//Constants -- Dont touch here
+const speedFactor = 0.1;
+
+//User Variables
 var xMaxSpeed = 15;
 var yMaxSpeed = 70;
-var speedFactor = 0.1;
-var timeGap = 10;
-var snowcount = 500;
+var snowcount = 100;
 var sizeMax = 100;
+//var timeGap = 10;
+
+//Runtime Variables
 var xMax;
 var yMax;
 var snowContainer;
