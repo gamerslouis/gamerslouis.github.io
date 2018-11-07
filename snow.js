@@ -44,7 +44,7 @@ function initSnow() {
         div.style.fontSize = sizeMax * Math.random() + 'px';
 
 
-        div.py = -400 * Math.random();
+        div.py = -400 * Math.random() - 150;
         div.px = xMax * Math.random();
         drawSnow(div);
 
@@ -59,7 +59,7 @@ function initSnow() {
 
 
 function resetPosition(snow) {
-    snow.py = -20;
+    snow.py = -150;
     snow.px = xMax * Math.random();
 }
 
