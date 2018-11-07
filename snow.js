@@ -89,7 +89,7 @@ function startSnow() {
     updateSnow();
 }
 
-function endSnow() {
+function stopSnow() {
     gmls_snowing = false;
     for (let i = 0; i < gmls_snowCount; i++) {
         gmls_snows[i].style.display = 'none';
@@ -104,4 +104,16 @@ function setSnowCount(newSnowcount){
 			resetPosition(gmls_snows[i]);
 			drawSnow(gmls_snows[i]);
 		}
+}
+
+function snowSwitch() {
+    let butt = document.getElementById('snowbutton');
+    if (gmls_snowing) {
+        butt.value = '冬天來了...';
+        stopSnow();
+    }
+    else {
+        butt.value = '冬天走了...';
+        startSnow();
+    }
 }
