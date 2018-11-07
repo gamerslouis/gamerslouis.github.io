@@ -4,7 +4,9 @@ const speedFactor = 0.1;
 //User Variables
 var xMaxSpeed = 15;
 var yMaxSpeed = 70;
+var yMinSpeed = 7;
 var snowcount = 100;
+var snowcountMax = 100;
 var sizeMax = 100;
 //var timeGap = 10;
 
@@ -33,7 +35,7 @@ function initSnow() {
     snowContainer.classList.add('snowcontainer');
     document.body.appendChild(snowContainer);
 
-    for (let i = 0; i < snowcount; i++) {
+    for (let i = 0; i < snowcountMax; i++) {
         let div = document.createElement('div');
         div.classList.add('snoww');
         div.style.display = 'none';
@@ -47,7 +49,7 @@ function initSnow() {
         drawSnow(div);
 
         div.xSpeed = xMaxSpeed * Math.random();
-        div.ySpeed = yMaxSpeed * Math.random();
+        div.ySpeed = (yMaxSpeed - yMinSpeed) * Math.random() + yMinSpeed;
 
         snows[i] = div;
         snowContainer.appendChild(div);
@@ -92,4 +94,12 @@ function endSnow() {
     for (let i = 0; i < snowcount; i++) {
         snows[i].style.display = 'none';
     }
+}
+
+function setSnowCount(newSnowcount){
+	let oldSnowcount = snowcount;
+	snowcount = newSnowcount > snowcountMax ? snowcountMax : newSnowcount;
+	if (newSnowcount < oldSnowcount)
+		for (let i = newSnowcount ; i<oldSnowcount ; i++)
+			resetPosition(snows[i]);
 }
