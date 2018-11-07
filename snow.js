@@ -100,6 +100,8 @@ function setSnowCount(newSnowcount){
 	let oldSnowcount = snowcount;
 	snowcount = newSnowcount > snowcountMax ? snowcountMax : newSnowcount;
 	if (newSnowcount < oldSnowcount)
-		for (let i = newSnowcount ; i<oldSnowcount ; i++)
+		for (let i = newSnowcount ; i<oldSnowcount ; i++){
 			resetPosition(snows[i]);
+			drawSnow(snows[i]);
+		}
 }
