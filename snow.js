@@ -6,7 +6,7 @@ var xMaxSpeed = 15;
 var yMaxSpeed = 70;
 var yMinSpeed = 7;
 var snowcount = 100;
-var snowcountMax = 100;
+var snowcountMax = 400;
 var sizeMax = 100;
 //var timeGap = 10;
 
