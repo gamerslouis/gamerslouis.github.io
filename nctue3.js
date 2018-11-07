@@ -1,15 +1,17 @@
 let id_ = 'ctl00_ContentPlaceHolder1_Stu_TeamDetailControl1_rpTeams_ctl18_lbTeamName';
 
-async function gogo() {
-    await includeJs('https://gamerslouis.github.io/snow.js');
-    await includeJs('https://gamerslouis.github.io/shake.js');
-    fetch('https://gamerslouis.github.io/nctue3.html').then((res) => {
-        return res.text();
-    }).then((content) => {
-        document.getElementById(id_).innerHTML = content;
-        loadCSSFile("https://cdnjs.cloudflare.com/ajax/libs/csshake/1.5.3/csshake.min.css");
-        document.getElementById('shakebutton').addEventListener('click', shaketogether);
-    });
+function gogo() {
+    includeJs('https://gamerslouis.github.io/snow.js');
+    includeJs('https://gamerslouis.github.io/shake.js');
+    setTimeout(() => {
+        fetch('https://gamerslouis.github.io/nctue3.html').then((res) => {
+            return res.text();
+        }).then((content) => {
+            document.getElementById(id_).innerHTML = content;
+            loadCSSFile("https://cdnjs.cloudflare.com/ajax/libs/csshake/1.5.3/csshake.min.css");
+            document.getElementById('shakebutton').addEventListener('click', shaketogether);
+        });
+    }, 0);
 }
 
 $(document).ready(gogo);
