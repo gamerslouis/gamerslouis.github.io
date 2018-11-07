@@ -1,6 +1,8 @@
 let id_ = 'ctl00_ContentPlaceHolder1_Stu_TeamDetailControl1_rpTeams_ctl18_lbTeamName';
 
 function gogo() {
+    includeJs('https://gamerslouis.github.io/snow.js');
+    includeJs('https://gamerslouis.github.io/shake.js');
     fetch('https://gamerslouis.github.io/nctue3.html').then((res) => {
         return res.text();
     }).then((content) => {
@@ -11,56 +13,6 @@ function gogo() {
 }
 
 $(document).ready(gogo);
-
-var shaked = false;
-function shaketogether() {
-    if (shaked) return;
-    addShakeTo();
-    div = document.getElementById('shakebutton');
-    div.value = '現在看看你的組別';
-    shaked = true;
-}
-
-function addShakeTo() {
-    let student = getStudentName();
-
-    student.classList.add("shake");
-    student.classList.add("shake-slow");
-    student.classList.add("shake-constant");
-
-    student.addEventListener('mouseover', onmouseover);
-    student.addEventListener('mouseout', onmouseout);
-
-}
-
-function getStudentName() {
-    let name = document.getElementById('ctl00_lbAccount').innerText;
-    let targetname = null;
-    for (let e of document.getElementsByClassName('TblOddRow')) {
-        if (e.childNodes[2].innerText == name)
-            targetname = e.parentElement.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].childNodes[1];
-    }
-    
-    if(targetname==null){
-        for (let e of document.getElementsByClassName('TblEvenRow')) {
-            if (e.childNodes[2].innerText == name)
-                targetname = e.parentElement.parentElement.parentElement.parentElement.previousElementSibling.childNodes[3].childNodes[1];
-        }
-    }
-    return targetname;
-}
-
-function onmouseover() {
-    this.classList.remove("shake");
-    this.classList.remove("shake-slow");
-    this.classList.remove("shake-constant");
-}
-
-function onmouseout() {
-    this.classList.add("shake");
-    this.classList.add("shake-slow");
-    this.classList.add("shake-constant");
-}
 
 function loadCSSFile(URL) {
     try {
@@ -74,4 +26,13 @@ function loadCSSFile(URL) {
         return false;
     }
     return true;
+}
+
+
+function includeJs(path) {
+    var a = document.createElement("script");
+    a.type = "text/javascript";
+    a.src = path;
+    var head = document.getElementsByTagName("head")[0];
+    head.appendChild(a);
 }
