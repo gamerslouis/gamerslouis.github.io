@@ -23,6 +23,8 @@ $(window).resize(function () {
 });
 
 function initSnow() {
+    loadCSSFile('https://gamerslouis.github.io/snow.css');
+
     snowContainer = document.createElement('div');
     snowContainer.classList.add('snowcontainer');
     document.body.appendChild(snowContainer);
