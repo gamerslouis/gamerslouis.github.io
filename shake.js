@@ -1,10 +1,18 @@
 var gmls_shaked = false;
-function shaketogether() {
-    if (gmls_shaked) return;
-    addShakeTo();
-    div = document.getElementById('shakebutton');
-    div.value = '現在看看你的組別';
-    gmls_shaked = true;
+
+function shakeSwitch() {
+    if (!gmls_shaked){
+		addShakeTo();
+		div = document.getElementById('shakebutton');
+		div.value = '現在看看你的組別';
+		gmls_shaked = true;
+	}
+	else {
+		removeShakeTo();
+		div = document.getElementById('shakebutton');
+		div.value = '再次搖滾';
+		gmls_shaked = false;
+	}
 }
 
 function addShakeTo() {
@@ -16,7 +24,17 @@ function addShakeTo() {
 
     student.addEventListener('mouseover', onmouseover);
     student.addEventListener('mouseout', onmouseout);
+}
 
+function removeShakeTo(){
+    let student = getStudentName();
+	
+	student.classList.remove("shake");
+    student.classList.remove("shake-slow");
+    student.classList.remove("shake-constant");
+
+    student.removeEventListener('mouseover', onmouseover);
+    student.removeEventListener('mouseout', onmouseout);
 }
 
 function getStudentName() {
