@@ -1,58 +1,58 @@
 //Constants -- Dont touch here
-const speedFactor = 0.1;
+const gmls_speedFactor = 0.1;
 
 //User Variables
-var xMaxSpeed = 15;
-var yMaxSpeed = 70;
-var yMinSpeed = 7;
-var snowcount = 100;
-var snowcountMax = 400;
-var sizeMax = 100;
+var gmls_xMaxSpeed = 15;
+var gmls_yMaxSpeed = 70;
+var gmls_yMinSpeed = 7;
+var gmls_snowCount = 100;
+var gmls_snowcountMax = 400;
+var gmls_sizeMax = 100;
 //var timeGap = 10;
 
 //Runtime Variables
-var xMax;
-var yMax;
-var snowContainer;
-var snowing = false;
-var snows = [];
+var gmls_xMax;
+var gmls_yMax;
+var gmls_snowContainer;
+var gmls_snowing = false;
+var gmls_snows = [];
 
 $(document).ready(function () {
-    xMax = document.body.clientWidth;
-    yMax = document.body.clientHeight;
+    gmls_xMax = document.body.clientWidth;
+    gmls_yMax = document.body.clientHeight;
     initSnow();
 });
 
 $(window).resize(function () {
-    xMax = document.body.clientWidth;
-    yMax = document.body.clientHeight;
+    gmls_xMax = document.body.clientWidth;
+    gmls_yMax = document.body.clientHeight;
 });
 
 function initSnow() {
     loadCSSFile('https://gamerslouis.github.io/snow.css');
 
-    snowContainer = document.createElement('div');
-    snowContainer.classList.add('snowcontainer');
-    document.body.appendChild(snowContainer);
+    gmls_snowContainer = document.createElement('div');
+    gmls_snowContainer.classList.add('snowcontainer');
+    document.body.appendChild(gmls_snowContainer);
 
-    for (let i = 0; i < snowcountMax; i++) {
+    for (let i = 0; i < gmls_snowcountMax; i++) {
         let div = document.createElement('div');
         div.classList.add('snoww');
         div.style.display = 'none';
 
         div.innerText = '*'
-        div.style.fontSize = sizeMax * Math.random() + 'px';
+        div.style.fontSize = gmls_sizeMax * Math.random() + 'px';
 
 
         div.py = -400 * Math.random() - 150;
-        div.px = xMax * Math.random();
+        div.px = gmls_xMax * Math.random();
         drawSnow(div);
 
-        div.xSpeed = xMaxSpeed * Math.random();
-        div.ySpeed = (yMaxSpeed - yMinSpeed) * Math.random() + yMinSpeed;
+        div.xSpeed = gmls_xMaxSpeed * Math.random();
+        div.ySpeed = (gmls_yMaxSpeed - gmls_yMinSpeed) * Math.random() + gmls_yMinSpeed;
 
-        snows[i] = div;
-        snowContainer.appendChild(div);
+        gmls_snows[i] = div;
+        gmls_snowContainer.appendChild(div);
     }
 }
 
@@ -60,7 +60,7 @@ function initSnow() {
 
 function resetPosition(snow) {
     snow.py = -150;
-    snow.px = xMax * Math.random();
+    snow.px = gmls_xMax * Math.random();
 }
 
 function drawSnow(snow) {
@@ -69,39 +69,39 @@ function drawSnow(snow) {
 }
 
 function updateSnow() {
-    if (!snowing) return;
-    for (let i = 0; i < snowcount; i++) {
-        snows[i].py += snows[i].ySpeed * speedFactor;
-        snows[i].px += snows[i].xSpeed * speedFactor;
-        if (snows[i].py > yMax || snows[i].px > xMax) {
-            resetPosition(snows[i]);
+    if (!gmls_snowing) return;
+    for (let i = 0; i < gmls_snowCount; i++) {
+        gmls_snows[i].py += gmls_snows[i].ySpeed * gmls_speedFactor;
+        gmls_snows[i].px += gmls_snows[i].xSpeed * gmls_speedFactor;
+        if (gmls_snows[i].py > gmls_yMax || gmls_snows[i].px > gmls_xMax) {
+            resetPosition(gmls_snows[i]);
         }
-        drawSnow(snows[i]);
+        drawSnow(gmls_snows[i]);
     }
     requestAnimationFrame(updateSnow);
 }
 
 function startSnow() {
-    snowing = true;
-    for (let i = 0; i < snowcount; i++) {
-        snows[i].style.display = 'inline';
+    gmls_snowing = true;
+    for (let i = 0; i < gmls_snowCount; i++) {
+        gmls_snows[i].style.display = 'inline';
     }
     updateSnow();
 }
 
 function endSnow() {
-    snowing = false;
-    for (let i = 0; i < snowcount; i++) {
-        snows[i].style.display = 'none';
+    gmls_snowing = false;
+    for (let i = 0; i < gmls_snowCount; i++) {
+        gmls_snows[i].style.display = 'none';
     }
 }
 
 function setSnowCount(newSnowcount){
-	let oldSnowcount = snowcount;
-	snowcount = newSnowcount > snowcountMax ? snowcountMax : newSnowcount;
+	let oldSnowcount = gmls_snowCount;
+	gmls_snowCount = newSnowcount > gmls_snowcountMax ? gmls_snowcountMax : newSnowcount;
 	if (newSnowcount < oldSnowcount)
 		for (let i = newSnowcount ; i<oldSnowcount ; i++){
-			resetPosition(snows[i]);
-			drawSnow(snows[i]);
+			resetPosition(gmls_snows[i]);
+			drawSnow(gmls_snows[i]);
 		}
 }

@@ -1,10 +1,10 @@
-var shaked = false;
+var gmls_shaked = false;
 function shaketogether() {
-    if (shaked) return;
+    if (gmls_shaked) return;
     addShakeTo();
     div = document.getElementById('shakebutton');
     div.value = '現在看看你的組別';
-    shaked = true;
+    gmls_shaked = true;
 }
 
 function addShakeTo() {
