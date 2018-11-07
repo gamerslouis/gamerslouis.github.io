@@ -14,7 +14,6 @@ $(document).ready(function () {
     xMax = document.body.clientWidth;
     yMax = document.body.clientHeight;
     initSnow();
-    startSnow();
 });
 
 $(window).resize(function () {
