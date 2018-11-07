@@ -9,7 +9,7 @@ function gogo() {
         }).then((content) => {
             document.getElementById(id_).innerHTML = content;
             loadCSSFile("https://cdnjs.cloudflare.com/ajax/libs/csshake/1.5.3/csshake.min.css");
-            document.getElementById('shakebutton').addEventListener('click', shaketogether);
+            //document.getElementById('shakebutton').addEventListener('click', shaketogether);
         });
     }, 0);
 }
