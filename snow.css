@@ -1,0 +1,19 @@
+.snoww {
+    position: absolute;
+    color: white;
+    z-index: -1000;
+}
+
+.snowcontainer {
+    position: fixed;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: 100%;
+    width: 100%;
+    z-index: -1000;
+}
+
+body {
+    background-color: black;
+    z-index: -1001;
+}
