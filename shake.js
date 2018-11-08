@@ -71,24 +71,29 @@ function startQuake()
     $('*').removeClass('shake');
     $('*').removeClass('shake-constant');
     $('*').removeClass('shake-slow');
-    let level = document.getElementById('quakeLevel').value;
+    let level;
+    let chs = document.getElementsByName('quakeLevel')
+    for (let ch of chs) {
+        if (ch.checked) {
+            level = ch.value;
+        }
+    }
     switch (level) {
-        case 1:
+        case '1':
             $('span').addClass('shake');
             $('span').addClass('shake-constant');
-            $('span').addClass('shake-slow');
             break;
-        case 2:
+        case '2':
             $('body').addClass('shake');
             $('body').addClass('shake-constant');
             $('body').addClass('shake-slow');
             break;
-        case 3:
+        case '3':
             $('td').addClass('shake');
             $('td').addClass('shake-constant');
             $('td').addClass('shake-slow');
             break;
-        case 4:
+        case '4':
             $('*').addClass('shake');
             $('*').addClass('shake-constant');
             $('*').addClass('shake-slow');
