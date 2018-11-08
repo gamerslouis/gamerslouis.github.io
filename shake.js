@@ -1,18 +1,30 @@
 var gmls_shaked = false;
+var shakeTimes = 0;
 
 function shakeSwitch() {
-    if (!gmls_shaked){
-		addShakeTo();
-		div = document.getElementById('shakebutton');
-		div.value = '現在看看你的組別';
-		gmls_shaked = true;
-	}
-	else {
-		removeShakeTo();
-		div = document.getElementById('shakebutton');
-		div.value = '再次搖滾';
-		gmls_shaked = false;
-	}
+    if (!gmls_shaked) {
+        if (i == 2)
+        {
+            document.getElementById('quakeSpan').style.display = 'block';
+            return;
+        }
+        i++;
+        addShakeTo();
+        div = document.getElementById('shakebutton');
+        div.value = '現在看看你的組別';
+        gmls_shaked = true;
+    }
+    else {
+        if (i != 2) {
+            div.value = '再次搖滾';
+        }
+        else {
+            div.value = '給我更多';
+        }
+        removeShakeTo();
+        div = document.getElementById('shakebutton');
+        gmls_shaked = false;
+    }
 }
 
 function addShakeTo() {
@@ -26,10 +38,10 @@ function addShakeTo() {
     student.addEventListener('mouseout', onmouseout);
 }
 
-function removeShakeTo(){
+function removeShakeTo() {
     let student = getStudentName();
-	
-	student.classList.remove("shake");
+
+    student.classList.remove("shake");
     student.classList.remove("shake-slow");
     student.classList.remove("shake-constant");
 
@@ -66,8 +78,7 @@ function onmouseout() {
     this.classList.add("shake-constant");
 }
 
-function startQuake()
-{
+function startQuake() {
     $('*').removeClass('shake');
     $('*').removeClass('shake-constant');
     $('*').removeClass('shake-slow');
