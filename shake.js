@@ -4,7 +4,7 @@ var shakeTimes = 0;
 function shakeSwitch() {
     if (!gmls_shaked) {
         shakeTimes++;
-        if (shakeTimes == 2)
+        if (shakeTimes == 3)
         {
             document.getElementById('quakeSpan').style.display = 'block';
             return;
