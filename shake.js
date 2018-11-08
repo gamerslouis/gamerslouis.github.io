@@ -47,3 +47,41 @@ function onmouseout() {
     this.classList.add("shake-slow");
     this.classList.add("shake-constant");
 }
+
+function startQuake()
+{
+    $('*').removeClass('shake');
+    $('*').removeClass('shake-constant');
+    $('*').removeClass('shake-slow');
+    let level = document.getElementById('quakeLevel').value;
+    switch (level) {
+        case 1:
+            $('span').addClass('shake');
+            $('span').addClass('shake-constant');
+            $('span').addClass('shake-slow');
+            break;
+        case 2:
+            $('body').addClass('shake');
+            $('body').addClass('shake-constant');
+            $('body').addClass('shake-slow');
+            break;
+        case 3:
+            $('td').addClass('shake');
+            $('td').addClass('shake-constant');
+            $('td').addClass('shake-slow');
+            break;
+        case 4:
+            $('*').addClass('shake');
+            $('*').addClass('shake-constant');
+            $('*').addClass('shake-slow');
+            break;
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode == 32) {
+        $('*').removeClass('shake');
+        $('*').removeClass('shake-constant');
+        $('*').removeClass('shake-slow');
+    }
+})
