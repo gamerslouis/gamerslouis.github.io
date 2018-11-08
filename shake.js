@@ -102,7 +102,7 @@ function startQuake()
 }
 
 document.addEventListener('keydown', (e) => {
-    if (e.keyCode == 32) {
+    if (e.keyCode == 65) {
         $('*').removeClass('shake');
         $('*').removeClass('shake-constant');
         $('*').removeClass('shake-slow');
