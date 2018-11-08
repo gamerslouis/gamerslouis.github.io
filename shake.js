@@ -3,19 +3,19 @@ var shakeTimes = 0;
 
 function shakeSwitch() {
     if (!gmls_shaked) {
-        if (i == 2)
+        shakeTimes++;
+        if (shakeTimes == 2)
         {
             document.getElementById('quakeSpan').style.display = 'block';
             return;
         }
-        i++;
         addShakeTo();
         div = document.getElementById('shakebutton');
         div.value = '現在看看你的組別';
         gmls_shaked = true;
     }
     else {
-        if (i != 2) {
+        if (shakeTimes != 2) {
             div.value = '再次搖滾';
         }
         else {
