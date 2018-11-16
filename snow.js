@@ -2,7 +2,7 @@
 const gmls_speedFactor = 0.1;
 
 //User Variables
-var gmls_xMaxSpeed = 15;
+var gmls_xMaxSpeed = 10;
 var gmls_yMaxSpeed = 70;
 var gmls_yMinSpeed = 7;
 var gmls_snowCount = 100;
@@ -48,7 +48,7 @@ function initSnow() {
         div.px = gmls_xMax * Math.random();
         drawSnow(div);
 
-        div.xSpeed = gmls_xMaxSpeed * Math.random() - gmls_xMaxSpeed / 2;
+        div.xSpeed = gmls_xMaxSpeed * 2 * Math.random() - gmls_xMaxSpeed;
         div.ySpeed = (gmls_yMaxSpeed - gmls_yMinSpeed) * Math.random() + gmls_yMinSpeed;
 
         gmls_snows[i] = div;
