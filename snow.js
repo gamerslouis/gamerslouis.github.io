@@ -48,7 +48,7 @@ function initSnow() {
         div.px = gmls_xMax * Math.random();
         drawSnow(div);
 
-        div.xSpeed = gmls_xMaxSpeed * Math.random();
+        div.xSpeed = gmls_xMaxSpeed * Math.random() - gmls_xMaxSpeed / 2;
         div.ySpeed = (gmls_yMaxSpeed - gmls_yMinSpeed) * Math.random() + gmls_yMinSpeed;
 
         gmls_snows[i] = div;
