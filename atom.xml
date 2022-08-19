@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Louis Li&#39;s Blog</title>
+  
+  
+  <link href="https://blog.louisif.me/atom.xml" rel="self"/>
+  
+  <link href="https://blog.louisif.me/"/>
+  <updated>2022-08-12T04:17:50.362Z</updated>
+  <id>https://blog.louisif.me/</id>
+  
+  <author>
+    <name>Louis Li</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Analyze why ONOS Packet Processor Treatment not Work</title>
+    <link href="https://blog.louisif.me/ONOS/Analyze-why-ONOS-Packet-Processor-Treatment-not-Work/"/>
+    <id>https://blog.louisif.me/ONOS/Analyze-why-ONOS-Packet-Processor-Treatment-not-Work/</id>
+    <published>2022-08-12T03:26:42.000Z</published>
+    <updated>2022-08-12T04:17:50.362Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>ONOS踩坑日記</p></blockquote><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近嘗試使用ONOS目前最新的2.7版來開發APP，用OpenFlow來讓交換機實現router的功能。</p><p>當封包經過router時，會根據routing table和封包的目標決定要往哪個interface送出，同時將封包的source mac address改為交換機的mac address、封包的destination mac address改為nexthop的mac address。因此我們需要在交換機上安裝一條flow rule，selector是destination mac address，treatment有三個instructions分別是: 修改src mac、dst mac和決定output port。</p><p>為了減少交換機上的flow entry的數量，所以採用reactive的方式，也就是當交換機收到第一封包時，先將封包送(packet-in)給SDN controller，controller根據routing table，直接修改該封包的mac address，並從交換機特定的port送出(packet-out)，同時生成對應的flow rule並安裝到交換機上，後續的封包就可以直接根據flow rule轉送而不用再經過controller。</p><h2 id="問題"><a href="#問題" class="headerlink" title="問題"></a>問題</h2><p>然而問題就出現在第一個封包上，根據tcpdump看到的結果，封包的source和destination mac address都沒有被修改到。</p><p>由於我是使用OVS來模擬Openflow交換機，因此首先懷疑是不是OVS本身實作限制，不支援同時包含上述三個instructions導致。然而，後續經過flow rule直接送出的封包，都有成功修改到mac address。由於只有第一個packet-in到controller，再packet-out回switch的封包沒有被修改，因此開始懷疑是ONOS的問題。</p><h2 id="追蹤"><a href="#追蹤" class="headerlink" title="追蹤"></a>追蹤</h2><p>在ONOS裡面，一般使用PacketProcessor的方式來處理packet-in到controller的封包。首先實作PacketProcessor介面，然後向PacketService註冊，ONOS就會調用processor處理packet-in的封包。</p><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> PacketProcessor processor = <span class="keyword">new</span> PacketProcessor() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span>(<span class="params">PacketContext context</span>)</span> &#123;</span><br><span class="line">        <span class="comment">// ....處理封包的邏輯</span></span><br><span class="line">        <span class="comment">// 修改設定封包的mac address和決定output port</span></span><br><span class="line">        context.treatmentBuilder()</span><br><span class="line">       .setEthSrc(srcMac)</span><br><span class="line">               .setEthDst(dstMac)</span><br><span class="line">               .setOutput(outPort.port()); </span><br><span class="line">        context.send(); <span class="comment">// 將封包packet-out回交換機</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@Activate</span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">activate</span>()</span> &#123;</span><br><span class="line">    packetService.addProcessor(processor,      </span><br><span class="line">         PacketProcessor.director(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>PacketContext會包含packet-in進來的封包內容，並可透過context.treatmentBuilder修改封包和決定要往哪個port送出去，最後透過send指令，packet-out回交換機。</p><p>搜查一下ONOS的原始碼，會在core&#x2F;api下面找到DefaultPacketContext ，這個class實作了PacketContext這個Interface，但是這個class是一個abstract class，因此一定有人繼承了它，繼續搜查PacketContext這個字會找到兩個跟Openflow相關的，DefaultOpenFlowPacketContext和OpenFlowCorePacketContext，但是後者才有繼承DefaultPacketContext 和實作PacketContext介面，因此PacketProcesser在處理openflow packet-in進來的封包時，拿到的PacketContext具體應該是OpenFlowCorePacketContext這個class。</p><p>打開OpenFlowCorePacketContext.java會看到它實現了send這個function，經過簡單的檢查後呼叫sendPacket這個function，然後你就會看到…</p><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendPacket</span>(<span class="params">Ethernet eth</span>)</span> &#123;</span><br><span class="line">        List&lt;Instruction&gt; ins = treatmentBuilder().build().allInstructions();</span><br><span class="line">        OFPort p = <span class="literal">null</span>;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> support arbitrary list of treatments must be supported in ofPacketContext</span></span><br><span class="line">        <span class="keyword">for</span> (Instruction i : ins) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i.type() == Type.OUTPUT) &#123;</span><br><span class="line">                p = buildPort(((OutputInstruction) i).port());</span><br><span class="line">                <span class="keyword">break</span>; <span class="comment">//for now...</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        .......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>謎底揭曉，原來ONOS只有實作output這個instruction (決定output port)，因此它直接忽略的set source mac和set destination mac兩個指令，交換機送出來的封包當然就只有往對的port送，而沒有改到mac address。</p><h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>結論就是在當前ONOS 2.7環境下，PacketProcesser在處理Openflow交換機封包packet-out的時候，只能決定該封包的output port，其餘對該封包的修改都是無效的。</p><h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul><li><a href="https://github.com/opennetworkinglab/onos/">ONOS Source code</a></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;ONOS踩坑日記&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;最近嘗試使用ONOS目前最新的2.7版來開發APP，用</summary>
+      
+    
+    
+    
+    <category term="ONOS" scheme="https://blog.louisif.me/categories/ONOS/"/>
+    
+    
+  </entry>
+  
+</feed>
