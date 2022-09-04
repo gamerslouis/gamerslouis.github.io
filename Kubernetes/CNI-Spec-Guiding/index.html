@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>CNI Spec 導讀 - Louis Li&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Louis Li&#039;s Blog"><meta name="msapplication-TileImage" content="/img/mylogo.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Louis Li&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="前言這次來嘗試寫寫看 spec 導讀，今天要講的是 Container Network Interface (CNI) Specification。CNI 是 CNCF 的一個專案，這個專案包含了今天要講的 CNI SPEC 以及基於這個 SPEC 開發出來 libraries 還有一系列的 CNI plugins。"><meta property="og:type" content="blog"><meta property="og:title" content="CNI Spec 導讀"><meta property="og:url" content="https://blog.louisif.me/Kubernetes/CNI-Spec-Guiding/"><meta property="og:site_name" content="Louis Li&#039;s Blog"><meta property="og:description" content="前言這次來嘗試寫寫看 spec 導讀，今天要講的是 Container Network Interface (CNI) Specification。CNI 是 CNCF 的一個專案，這個專案包含了今天要講的 CNI SPEC 以及基於這個 SPEC 開發出來 libraries 還有一系列的 CNI plugins。"><meta property="og:locale" content="zh_TW"><meta property="og:image" content="https://blog.louisif.me/img/og_image.png"><meta property="article:published_time" content="2022-09-04T16:57:00.000Z"><meta property="article:modified_time" content="2022-09-04T18:01:07.821Z"><meta property="article:author" content="Louis Li"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.louisif.me/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.louisif.me/Kubernetes/CNI-Spec-Guiding/"},"headline":"CNI Spec 導讀","image":["https://blog.louisif.me/img/og_image.png"],"datePublished":"2022-09-04T16:57:00.000Z","dateModified":"2022-09-04T18:01:07.821Z","author":{"@type":"Person","name":"Louis Li"},"publisher":{"@type":"Organization","name":"Louis Li's Blog","logo":{"@type":"ImageObject","url":"https://blog.louisif.me/img/mylogo.svg"}},"description":"前言這次來嘗試寫寫看 spec 導讀，今天要講的是 Container Network Interface (CNI) Specification。CNI 是 CNCF 的一個專案，這個專案包含了今天要講的 CNI SPEC 以及基於這個 SPEC 開發出來 libraries 還有一系列的 CNI plugins。"}</script><link rel="canonical" href="https://blog.louisif.me/Kubernetes/CNI-Spec-Guiding/"><link rel="alternate" href="/atom.xml" title="Louis Li&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/mylogo.svg"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.6.0/styles/atom-one-dark-reasonable.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-79VDS4QY8D" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-79VDS4QY8D');</script><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/mylogo.svg" alt="Louis Li&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/archives">Archives</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="文章目錄" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><p class="level-item is-flex justify-content-center"><i class="fas fa-calendar mr-1"></i><span><time dateTime="2022-09-04T16:57:00.000Z" title="9/5/2022, 12:57:00 AM">2022-09-05</time>發表</span></p><p class="level-item is-flex justify-content-center"><i class="fas fa-folder mr-1"></i><span><a class="link-muted" href="/categories/Kubernetes/">Kubernetes</a></span></p><p class="level-item is-flex justify-content-center"><i class="fas fa-clock mr-1"></i><span>36 分鐘讀完 (大約5334個字)</span></p><p class="level-item is-flex justify-content-center"><i class="fas fa-person mr-1"></i><span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次訪問</span></p></div></div><h1 class="title is-3 is-size-4-mobile">CNI Spec 導讀</h1><div class="content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這次來嘗試寫寫看 spec 導讀，今天要講的是 <a target="_blank" rel="noopener" href="https://github.com/containernetworking/cni/blob/spec-v1.0.0/SPEC.md">Container Network Interface (CNI) Specification</a>。CNI 是 <a target="_blank" rel="noopener" href="https://cncf.io/">CNCF</a> 的一個專案，這個專案包含了今天要講的 CNI SPEC 以及基於這個 SPEC 開發出來 libraries 還有一系列的 CNI plugins。</p>
+<span id="more"></span> 
+
+<p>CNI 定義了一套 plugin-based 的網路解決方案，包含了設定還有呼叫執行的標準，使用 CNI 最知名的專案應該就是 kubernetes 了，在 k8s 環境中，容器的網路並不是直接由 container runtime (ex. Docker) 處理的，container runtime 建立好容器後，kubelet 就會依照 CNI 的設定和通訊標準去呼叫 CNI plugin，由 CNI plugin 來完成容器的網路設置。</p>
+<p>Container runtime 在執行容器建立時，會依據設定檔 (後續稱為 network configuration) 的指示，依序呼叫一個或多個的 CNI plugin 來完成網路功能的設置，一個網路功能的設置可能會需要多個 CNI plugins 之間的相互合作，或著由多個 CNI plugin 提供多個不同的網路功能。</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>目前 CNI spec 的版本是 1.0.0，CNI 的 repository 裡面除了 spec 文件外也包含了基於 CNI spec 開發的 go library，用於 CNI plugin 的開發。不過 CNI spec 和 library 的版本號是獨立的，當前的 library 版本是 1.1.2。</p>
+<p>首先要對幾個基本名詞定義</p>
+<ul>
+<li>container 是一個網路獨立的環境，在 linux 上通常透過 network namespace 的機制來切割，不過也可能是一個獨立的 VM。</li>
+<li>network 是 endpoints 的集合，每個 endpoint 都有著一個唯一是別的的地址 (通常是 ip address) 可用於互相通訊。一個端點可能是一個容器、VM 或著路由器之類的網路設備。</li>
+<li>runtime 指的是呼叫執行 CNI plugin 的程式，以 k8s 來說，kubelet 作為這個角色</li>
+<li>plugin 指的是一個用來完成套用特定網路設定的程式。</li>
+</ul>
+<p>CNI Spec 包含五個部分</p>
+<ol>
+<li>Network configuration format: CNI 網路設定的格式</li>
+<li>Execution Protocol: runtime 和 CNI plugin 之間溝通的 protocol</li>
+<li>Execution of Network Configurations: 描述 runtime 如何解析 network configuration 和操作 CNI plugin。</li>
+<li>Plugin Delegation: 描述 CNI plugin 如何呼叫 CNI plugin。</li>
+<li>Result Types: 描述 CNI plugin 回傳的結果格式。</li>
+</ol>
+<h2 id="Section-1-Network-configuration-format"><a href="#Section-1-Network-configuration-format" class="headerlink" title="Section 1: Network configuration format"></a>Section 1: Network configuration format</h2><p>CNI 定義了一個網路設定的格式，這個格式用於 runtime 讀取的設定檔，也用於 runtime 解析後，plugin 接收的格式，通常來說設定檔是以 ** 靜態 ** 檔案的方式存在主機上，不會任意變更。</p>
+<p>CNI 使用了 JSON 作為設定檔的格式，並包含以下幾個主要欄位</p>
+<ul>
+<li><code>cniVersion</code> (string): 對應的 CNI spec 版本，當前是 1.0.0</li>
+<li><code>name</code> (string): 一個在主機上不重複的網路名稱</li>
+<li><code>disableCheck</code> (boolean): 如果 disableCheck 是 true 的話，runtime 就不能呼叫 <code>CHECK</code>，<code>CHECK</code> 是 spec 定義的一個指令用來檢查網路是否符合 plugin 依據設定的結果，由於一個網路設定可能會呼叫多個 CNI plugins，因此可能會出現網路狀態符合管理員預期，但是 CNI plugin 之間衝突檢查失敗的情況，這時就可以設定 disableCheck</li>
+<li><code>plugin</code> (list): CNI plugin 設定 (Plugin configuration object) 的列表。</li>
+</ul>
+<h3 id="Plugin-configuration-object"><a href="#Plugin-configuration-object" class="headerlink" title="Plugin configuration object"></a><strong>Plugin configuration object</strong></h3><p>plugin configuration object 包含了一些明定的欄位，但 CNI plugin 可能根據需要增加欄位，會由 runtime 在不修改的情況下送給 CNI plugin。</p>
+<ul>
+<li>必填:<ul>
+<li><code>type</code> (string): CNI plugin 的執行檔名稱</li>
+</ul>
+</li>
+<li>可選欄位 (CNI protocol 使用):<ul>
+<li><code>capabilities</code> (dictionary): 定義 CNI plugin 支援的 capabilities，後面在 <a href="#Deriving-execution-configuration-from-plugin-configuration">section 3</a> 會介紹。</li>
+</ul>
+</li>
+<li>保留欄位：這些欄位是在執行過程中，由 runtime 生成出來的，因此不應該在設定檔內被定義。<ul>
+<li><code>runtimeConfig</code></li>
+<li><code>args</code></li>
+<li>任何 <code>cni.dev/</code> 開頭的 key</li>
+</ul>
+</li>
+<li>可選欄位：不是 protocol 定義的欄位，但是由於很多 CNI plugin 都有使用，因此具有特定的意義。<ul>
+<li>ipMasq (boolean): 如果 plugin 支援的話，會在 host 上替該網路設置 IP masquerade，如果 host 要做為該網路的 gateway 的話，可能需要該功能。</li>
+<li>ipam (dictionary): IPAM (IP Address Management) 設置，後面在 <a href="#Section-4-Plugin-Delegation">section 4</a> 會介紹。</li>
+<li>dns (dictionary): DNS 設置相關設置<ul>
+<li>nameservers (list of strings): DNS server 的 IP 列表</li>
+<li>domain (string): DNS search domain</li>
+<li>search (list of strings),: DNS search domain 列表</li>
+<li>options (list of strings): DNS options 列表</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>其他欄位: CNI plugin 自己定義的額外欄位。</li>
+</ul>
+<p>設定檔範例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs java">&#123;<br>  <span class="hljs-string">&quot;cniVersion&quot;</span>: <span class="hljs-string">&quot;1.0.0&quot;</span>,<br>  <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;dbnet&quot;</span>,<br>  <span class="hljs-string">&quot;plugins&quot;</span>: [<br>    &#123;<br>      <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;bridge&quot;</span>,<br>      <span class="hljs-comment">//plugin specific parameters</span><br>      <span class="hljs-string">&quot;bridge&quot;</span>: <span class="hljs-string">&quot;cni0&quot;</span>,<br>      <span class="hljs-string">&quot;keyA&quot;</span>: [<span class="hljs-string">&quot;some more&quot;</span>, <span class="hljs-string">&quot;plugin specific&quot;</span>, <span class="hljs-string">&quot;configuration&quot;</span>],<br>      <br>      <span class="hljs-string">&quot;ipam&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;host-local&quot;</span>,<br>        <span class="hljs-comment">//ipam specific</span><br>        <span class="hljs-string">&quot;subnet&quot;</span>: <span class="hljs-string">&quot;10.1.0.0/16&quot;</span>,<br>        <span class="hljs-string">&quot;gateway&quot;</span>: <span class="hljs-string">&quot;10.1.0.1&quot;</span>,<br>        <span class="hljs-string">&quot;routes&quot;</span>: [<br>            &#123;<span class="hljs-string">&quot;dst&quot;</span>: <span class="hljs-string">&quot;0.0.0.0/0&quot;</span>&#125;<br>        ]<br>      &#125;,<br>      <span class="hljs-string">&quot;dns&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;nameservers&quot;</span>: [ <span class="hljs-string">&quot;10.1.0.1&quot;</span> ]<br>      &#125;<br>    &#125;,<br>    &#123;<br>      <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;tuning&quot;</span>,<br>      <span class="hljs-string">&quot;capabilities&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;mac&quot;</span>: <span class="hljs-literal">true</span><br>      &#125;,<br>      <span class="hljs-string">&quot;sysctl&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;net.core.somaxconn&quot;</span>: <span class="hljs-string">&quot;500&quot;</span><br>      &#125;<br>    &#125;,<br>    &#123;<br>        <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;portmap&quot;</span>,<br>        <span class="hljs-string">&quot;capabilities&quot;</span>: &#123;<span class="hljs-string">&quot;portMappings&quot;</span>: <span class="hljs-literal">true</span>&#125;<br>    &#125;<br>  ]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Section-2-Execution-Protocol"><a href="#Section-2-Execution-Protocol" class="headerlink" title="Section 2: Execution Protocol"></a>Section 2: Execution Protocol</h2><p>CNI 的工作模式是由 container runtime 去呼叫 CNI plugin 的 binaries，CNI Protocol 定義了 runtime 和 plugin 之間的溝通標準。</p>
+<p>CNI plugin 的工作是完成容器網路介面的某種設置，大致上可以分成兩類</p>
+<ul>
+<li>Interface plugin: 建立容器內的網路介面，並確保其連接可用</li>
+<li>Chained plugin: 調整修改一個已建立的介面 (可能同時會需要建立更多額外的介面)</li>
+</ul>
+<p>Runtime 透過兩種方式傳遞參數，一是透過環境變數，二是透過 stdin 傳遞 Section 1 定義的 configuration。如果成功的話，結果會透過 stdout 傳遞，如果失敗的話就會錯誤資訊會透過 stderr 傳遞。configuration 和結果、錯誤都是使用 JSON 格式。</p>
+<p>Runtime 必須在 Runtime 的網路執行，大多數情況下就是在主機的預設 network namespace&#x2F;dom0</p>
+<h3 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters</h3><p>Protocol 的參數都是透過環境變數來傳遞的，可能的參數如下</p>
+<ul>
+<li>CNI_COMMAND: 當前執行的 CNI 操作 (可能是 <code>ADD</code>, <code>DEL</code>, <code>CHECK</code>. <code>VERSION</code>)</li>
+<li>CNI_CONTAINERID: 容器的ＩＤ</li>
+<li>CNI_NETNS: 容器網路空間的參考，如果是使用 namespaces 的方式來切割的話，就是 namespce 的路徑（e.g. <code>/run/netns/[nsname]</code> )</li>
+<li>CNI_IFNAME: 要建立在容器內的介面名稱，如果 plugin 無法建立該名稱則回傳錯誤</li>
+<li>CNI_ARGS: 其他參數，Alphanumeric 格式的 key-value pairs，使用分號隔開”e.g. <code>FOO=BAR;ABC=123</code></li>
+<li>CNI_PATH: CNI plugin 的搜尋路徑，因為 CNI 存在 CNI plugin 呼叫 CNI plugin 的情況，所以需要這個路徑。如果包含多個路徑，使用 OS 定義的分隔符號分割。Linux 使用 <code>:</code> ，Windows 使用 <code>;</code></li>
+</ul>
+<h3 id="Errors"><a href="#Errors" class="headerlink" title="Errors"></a>Errors</h3><p>如果執行成功，CNI Plugin 應該回傳 0。如果失敗則回傳非 0，並從 stderr 回傳 error result type structure。</p>
+<h3 id="CNI-operations"><a href="#CNI-operations" class="headerlink" title="CNI operations"></a>CNI operations</h3><h4 id="ADD"><a href="#ADD" class="headerlink" title="ADD"></a>ADD</h4><p>CNI plugin 會在 <code>CNI_NETNS</code> 內建立 <code>CNI_IFNAME</code> 介面或對該介面套用特定的設置</p>
+<p>如果 CNI plugin 執行成功，應該從 stdout 回傳一個 result structure。如果 plugin 的 stdin 輸入包含 prevResult，他必些直接把 prevResult 包在 result structure 內或對他修改後在包在 result structure 內，runtime 會把前一個 CNI 輸出的 prevResult 包在下一個 CNI 的 stdin 輸入內。</p>
+<p>如果 CNI plugin 嘗試建立介面時，該介面已經存在，應該發出錯誤。</p>
+<p>Runtime 不應該在沒有 DEL 的情況下對一個 <code>CNI_CONTAINERID</code> 容器的一個 <code>CNI_IFNAME</code> 介面多次呼叫 ADD。不過可能對同一個 container 的不同介面呼叫 ADD。</p>
+<p>必有的輸入包含 STDIN JSON configuration object、 <code>CNI_COMMAND</code>、<code>CNI_CONTAINERID</code> 、 <code>CNI_NETNS</code> 和 <code>CNI_IFNAME</code> 。 <code>CNI_ARGS</code> 和 <code>CNI_PATH</code> 為可選項。</p>
+<h4 id="DEL"><a href="#DEL" class="headerlink" title="DEL"></a>DEL</h4><p>移除 <code>CNI_NETNS</code> 內的 <code>CNI_IFNAME</code> 介面，或還原 ADD 套用的網路設定</p>
+<p>通常來說，如果要釋放的資源已經不存在，DEL 也應該視為成功。例如容器網路已經不存在了，一個 IPAM plugin 應該還是要正常的釋放 IP 和回傳成功，除非 IPAM plugin 對容器網路存在與否有嚴格的要求。即便是 DHCP plugin，雖然執行 DEL 操作的時侯，需要透過容器網路發送 DHCP release 訊息，但是由於 DHCP leases 有 lifetime 的機制，超時後會自動回收，因此即便容器網路不存在，DHCP plugin 在執行 DEL 操作時，也應該該回傳成功。</p>
+<p>如果重複對一個 <code>CNI_CONTAINERID</code> 容器的 <code>CNI_IFNAME</code> 介面執行多次 DEL 操作，plguin 都應該回傳，即便介面已經不存在或 ADD 套用的修改已經還原。</p>
+<p>必有的輸入包含 STDIN JSON configuration object、 <code>CNI_COMMAND</code>、<code>CNI_CONTAINERID</code> 和 <code>CNI_IFNAME</code>。 <code>CNI_NETNS</code>、<code>CNI_ARGS</code> 和 <code>CNI_PATH</code> 為可選項。</p>
+<h4 id="CHECK"><a href="#CHECK" class="headerlink" title="CHECK"></a>CHECK</h4><p>Runtime 透過 <code>CHECK</code> 檢查容器的狀態，並確保容器網路符合預期。CNI spec 可以分為 plugin 和 runtime 的兩部分</p>
+<p>Plugin:</p>
+<ul>
+<li><p>plugin 必須根據 <code>prevResult</code> 來判斷介面和地址是否符合預期</p>
+</li>
+<li><p>plugin 必須接受其他 chained plugin 對介面修改的結果</p>
+</li>
+<li><p>如果 plugin 建立並列舉在 <code>prevResult</code> 的 CNI Result type 資源 (介面、地址、路由規則) 不存在或不符合預期狀態，plugin 應該回傳錯誤</p>
+</li>
+<li><p>如果其他不在 Result type 內的資源不存在或不符合預期也應該回垂錯誤。可能的資源如下</p>
+<ul>
+<li>防火牆規則</li>
+<li>流量控管 (Traffic shaping controls)</li>
+<li>IP 保留 (Reservation)</li>
+<li>外部依賴，如連接所需的 daemon</li>
+</ul>
+</li>
+<li><p>如果發現容器網路是無法訪問的應該回傳錯誤</p>
+</li>
+<li><p>plugin 必須在完成 <code>ADD</code> 後能夠立即處理 <code>CHECK</code> 指令，應此 plguin 應該要容忍非同步完成的網路設置在一定的時間內不符合預期。</p>
+</li>
+<li><p>plugin 執行 <code>CHECK</code> 時，應該呼叫所有 delegated plugin 的 <code>CHECK</code>，並把 delegated plugin 的錯誤傳給 plugin 的呼叫者</p>
+</li>
+</ul>
+<p>Runtime:</p>
+<ul>
+<li>Runtime 不應該在未執行 <code>ADD</code> 前或已經 <code>DEL</code> 後沒在執行一次 <code>ADD</code> 的容器執行 <code>CHECK</code></li>
+<li>如果 configuration 的 disableCheck 為真，runtime 不應呼叫 disableCheck</li>
+<li>Runtime 呼叫 <code>CHECK</code> 時，configuration 必須在 <code>prevResult</code> 包含前一次 <code>ADD</code> 操作時最後一個 plugin 的 Result。Runtime 可能會使用 libcni 提供的 Result caching 功能。</li>
+<li>如果其中一個 plugin 回傳錯誤，runtime 可能不會呼叫後面 plugin 的 <code>CHECK</code></li>
+<li>Runtime 可能會在 <code>ADD</code> 完後的下一刻一直到 <code>DEL</code> 執行前的任何時間執行 <code>CHECK</code></li>
+<li>Runtime 可能會假設一個 <code>CHECK</code> 失敗的容器會永久處於配置錯誤的狀態</li>
+</ul>
+<p>必有的輸入包含 STDIN JSON configuration object、 <code>CNI_COMMAND</code>、<code>CNI_CONTAINERID</code>、<code>CNI_NETNS</code> 和 <code>CNI_IFNAME</code>。 <code>CNI_ARGS</code> 和 <code>CNI_PATH</code> 為可選項。</p>
+<p>除了 <code>CNI_PATH</code> 以外的參數必須和 <code>ADD</code> 時一致。</p>
+<h4 id="VERSION"><a href="#VERSION" class="headerlink" title="VERSION"></a>VERSION</h4><p>Plugin 透過 stdout 輸出 JSON 格式的 version result type object，用於查看 CNI plugin 的版本。</p>
+<p>Stdin 輸入的 JSON 物件只包含 <code>cniVersion</code>。<br>環境變數參數只需要 <code>CNI_COMMAND</code>。</p>
+<h2 id="Section-3-Execution-of-Network-Configurations"><a href="#Section-3-Execution-of-Network-Configurations" class="headerlink" title="Section 3: Execution of Network Configurations"></a>Section 3: Execution of Network Configurations</h2><p>這個章節描述了 runtime 如何解析 network configuration，並執行 CNI plugins。Runtime 可能會想要新增、刪除、檢查 configuration，並對應到 CNI plugin 的 <code>ADD</code>, <code>DELETE</code>, <code>CHECK</code> 操作。這個章節也定義 configuration 是如何改變並提供給 plugin 的。</p>
+<p>對容器的 network configuration 操作稱之為 attachment，一個 attachment 通常對應到一個特定 <code>CNI_CONTAINERID</code> 容器的 <code>CNI_IFNAME</code> 介面。</p>
+<h3 id="生命週期"><a href="#生命週期" class="headerlink" title="生命週期"></a>生命週期</h3><ul>
+<li>Runtime 必須在呼叫任何 CNI Plugin 之前，為容器建立新的 network namespace</li>
+<li>Runtime 一定不能同時在一個容器執行多個 plugin 命令，但是同時處理多個容器是可以的。因此 plugin 必須能夠處理多容器 concurrency 的問題，並在共享的資源 (e.g. IPAM DB) 實作 lock 機制</li>
+<li>Runtime 必須確保 <code>ADD</code> 操作後必定執行一次 <code>DEL</code> 操作，即便 <code>ADD</code> 失敗。唯一可能的例外是如結點直接丟失之類的災難性事件。</li>
+<li><code>DEL</code> 操作可能連續多次執行</li>
+<li>network configuration 在 ADD 和 DEL 操作之間，以及不同的為 attachment 之間應該保持一致不變</li>
+<li>runtime 必須負責清除容器的 network namespace</li>
+</ul>
+<h3 id="Attachment-Parameters"><a href="#Attachment-Parameters" class="headerlink" title="Attachment Parameters"></a>Attachment Parameters</h3><p>Network configuration 在不同的 attachments 間應該保持一致。不過 runtime 會傳遞其他每個 attachment 獨立的參數。</p>
+<ul>
+<li>Container ID: 對應到 Section 2 <code>CNI_CONTAINERID</code> 環境變數</li>
+<li>Namespace: 對應到 <code>CNI_NETNS</code> 環境變數</li>
+<li>Container interface name: 對應到 <code>CNI_IFNAME</code> 環境變數</li>
+<li>Generic Arguments: 對應到 <code>CNI_ARGS</code> 環境變數</li>
+<li>Capability Arguments: </li>
+<li>CNI plugins search path: 對應到 <code>CNI_PATH</code> 環境變數</li>
+</ul>
+<h3 id="Adding-an-attachment"><a href="#Adding-an-attachment" class="headerlink" title="Adding an attachment"></a>Adding an attachment</h3><p>對 configuration 的 <code>plugins</code> 欄位的每個 plugin configuration 執行以下步驟</p>
+<ol>
+<li>根據 <code>type</code> 欄位尋找 CNI plugin 的執行檔，如果找不到則回傳錯誤</li>
+<li>根據 plugin configuration 生成送給 plugin sdtin 的 configuration</li>
+</ol>
+<ul>
+<li>只有第一個執行的 plugin 不會帶 prevResult 欄位，後續執行的 plugin 都會把前一個的 plugin 的結果放在 prevResult</li>
+</ul>
+<ol start="3">
+<li>執行 plugin 的執行檔。設置 <code>CNI_COMMAND=ADD</code>，提供前面定義的環境變數，以及透過 standard in 傳輸生成出來的 configuration</li>
+<li>如果 plugin 回傳錯誤，中斷執行並回傳錯誤給 caller</li>
+</ol>
+<p>Runtime 必須持久保存最後一個 plugin 的結果，用於 check 和 delete 操作。</p>
+<h3 id="Deleting-an-attachment"><a href="#Deleting-an-attachment" class="headerlink" title="Deleting an attachment"></a>Deleting an attachment</h3><p>刪除 attachment 和添加基本上差不多的，差別是</p>
+<ul>
+<li>plugin 的執行順序是反過來的，從最後一個開始</li>
+<li><code>prevResult</code> 欄永遠是上一次 add 操作時，最後一個 plugin 的結果</li>
+</ul>
+<p>對 configuration 的 <code>plugins</code> 欄位反序的每個 plugin configuration 執行以下步驟</p>
+<ol>
+<li>根據 <code>type</code> 欄位尋找 CNI plugin 的執行檔，如果找不到則回傳錯誤</li>
+<li>根據 plugin configuration 和上次 ADD 執行的 result 生成送給 plugin sdtin 的 configuration</li>
+<li>執行 plugin 的執行檔。設置 <code>CNI_COMMAND=DEL</code>，提供前面定義的環境變數，以及透過 standard in 傳輸生成出來的 configuration</li>
+<li>如果 plugin 回傳錯誤，中斷執行並回傳錯誤給 caller</li>
+</ol>
+<h3 id="Checking-an-attachment"><a href="#Checking-an-attachment" class="headerlink" title="Checking an attachment"></a>Checking an attachment</h3><p>如同 Section 2 所述，Runtime 會透過 CNI plugin 檢查每個 attachment 是否正常運作中。<br>需注意的是 Runtime 必須使用和 add 操作時一致的 attachment parameters</p>
+<p>檢查和添加只有兩個差別</p>
+<ul>
+<li><code>prevResult</code> 欄永遠是上一次 add 操作時，最後一個 plugin 的結果</li>
+<li>如果 network configuation 中 <code>disableCheck</code> 為真，則直接回傳成功</li>
+</ul>
+<p>對 configuration 的 <code>plugins</code> 欄位的每個 plugin configuration 執行以下步驟</p>
+<ol>
+<li>根據 <code>type</code> 欄位尋找 CNI plugin 的執行檔，如果找不到則回傳錯誤</li>
+<li>根據 plugin configuration 和上次 ADD 執行的 result 生成送給 plugin sdtin 的 configuration</li>
+<li>執行 plugin 的執行檔。設置 <code>CNI_COMMAND=CHECK</code>，提供前面定義的環境變數，以及透過 standard in 傳輸生成出來的 configuration</li>
+<li>如果 plugin 回傳錯誤，中斷執行並回傳錯誤給 caller</li>
+</ol>
+<h3 id="Deriving-execution-configuration-from-plugin-configuration"><a href="#Deriving-execution-configuration-from-plugin-configuration" class="headerlink" title="Deriving execution configuration from plugin configuration"></a>Deriving execution configuration from plugin configuration</h3><p>在 add, delete, check 操作時，runtime 必須根據 network configuration 生成出 plugin 可以存取的 execution configuration (基本對應到 plugin configuration)，並填入內容。</p>
+<p>如同 section 2 所述，execution configuration 使用 JSON 格式並透過 stdin 傳給 CNI plugin。</p>
+<ul>
+<li><p>必要的欄位如下:</p>
+<ul>
+<li>cniVersion: 同 network configuraion 中 cniVersion 的值</li>
+<li>name: 同 network configuraion 中 name 的值</li>
+<li>runtimeConfig: runtime 需要和 plugin 可提供的 capabilities 的聯集 (capability 會在後面討論)</li>
+<li>prevResult: CNI plugin 回傳的 Result type 結果</li>
+</ul>
+</li>
+<li><p><code>capabilities</code> 欄位必須被移除</p>
+</li>
+<li><p>其他 plugin configuration 的欄位應該被放入 execution configuration</p>
+</li>
+</ul>
+<h4 id="Deriving-runtimeConfig"><a href="#Deriving-runtimeConfig" class="headerlink" title="Deriving runtimeConfig"></a>Deriving runtimeConfig</h4><p>相對於靜態的 network configuration 來說，runtime 可能會需要根據每個不同的 attachment 產生動態參數。<br>雖然 runtime 可以透過 <code>CNI_ARGS</code> 傳遞動態參數給 CNI plugin，但是我們沒辦法預期說 CNI plugin 會不會接收這個參數。透過 capabilities 欄位，可以明定 plugin 支援的功能，runtime 根據 capabilities 及需求，動態生成設定並填入 <code>runtimeConfig</code>。CNI spec 沒有定義 capability，但是比較通用的 capability 有列舉在另外一份 <a target="_blank" rel="noopener" href="https://github.com/containernetworking/cni/blob/main/CONVENTIONS.md#dynamic-plugin-specific-fields-capabilities--runtime-configuration">文件</a>。</p>
+<p>以 kubernetes 常用的 Node port 功能來說，需要 CNI plugin 支援 portMappings 這個 capability。<br>在 section 1 的定義中，plugin configuration 包含了 <code>capabilities</code> 欄位，在這個欄位填入 <code>portMappings</code>，讓 runtime 知道可以透過該 plugin 處理 port mapping。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPlugin&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;capabilities&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;portMappings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>Runtime 執行 CNI plugin 時，會根據 <code>capabilities</code> 生成 <code>runtimeConfig</code>，並填入對應的動態參數。 </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myPlugin&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;runtimeConfig&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;portMappings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> <br>      <span class="hljs-punctuation">&#123;</span> <br>        <span class="hljs-attr">&quot;hostPort&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">8080</span><span class="hljs-punctuation">,</span> <br>        <span class="hljs-attr">&quot;containerPort&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">80</span><span class="hljs-punctuation">,</span> <br>        <span class="hljs-attr">&quot;protocol&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tcp&quot;</span> <br>      <span class="hljs-punctuation">&#125;</span> <br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br>  ...<br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Section-4-Plugin-Delegation"><a href="#Section-4-Plugin-Delegation" class="headerlink" title="Section 4: Plugin Delegation"></a>Section 4: Plugin Delegation</h2><p>雖然 CNI 的主要的架構是一系列的 CNI plkugin 依次執行，但這樣的方式有些時候沒辦法滿足 CNI 的需求。CNI plugin 可能會需要將某些功能委託給另外一個 CNI plugin，並存在 plugin 呼叫 plugin 的情況，最常見的案例就是 IP 地址的分配管理。</p>
+<p>通常來說，CNI plugin 應該要指定並維護容器的 IP 地址以及下達必要的 routing rules，雖然由 CNI plugin 自主完成可以讓 CNI plugin 有更大的彈性但是也加重了 CNI plugin 的職責和開發難度，讓不同的 CNI plugin 需要重複開發相同的 IP 地址管理邏輯，因此許多 CNI 將 IP 管理的邏輯委託給另一個獨立的 plugin，讓相關邏輯可以直接被複用。對此除了前面提到的 interface plugin 和 chanined plugin，我們定義了第三類的 plugin - IP Address Management Pligin (IPAM plugin)。</p>
+<p>由主要的 CNI plugin 去呼叫 IPAM plugin，IPAM plugin 判斷網路介面的 IP 地址、gateway、routing rules，並回傳資訊給主要的 CNI plugin 去完成相對應設置。(IPAM plugin 可能會透過 dhcp 之類的 protocl, 儲存在本地的檔案系統資訊或 network configuration 的 ipam section 取得資訊)</p>
+<h3 id="Delegated-Plugin-protocol"><a href="#Delegated-Plugin-protocol" class="headerlink" title="Delegated Plugin protocol"></a>Delegated Plugin protocol</h3><p>和 Runtime 執行 CNI plugin 的方式一樣，delegated plugin 也是透過執行 CNI plugin 可執行程式的方式。主要的 plugin 在 <code>CNI_PATH</code> 路徑下搜尋 CNI plugin。delegated plugin 必須接收和主要 plugin 完全一致的環境變數參數，以及主要 plugin 透過 stdin 接收到的完整 execute configuration。<br>如果執行成功則回傳 0，並透過 stdout 返回 Success result type output。</p>
+<h3 id="Delegated-plugin-execution-procedure"><a href="#Delegated-plugin-execution-procedure" class="headerlink" title="Delegated plugin execution procedure"></a>Delegated plugin execution procedure</h3><ul>
+<li><p>當 CNI plugin 執行 delegated plugin 時:</p>
+<ul>
+<li>在 <code>CNI_PATH</code> 路徑下搜尋 plugin 的可執行程式</li>
+<li>使用 CNI plugin 的環境變數參數和 execute configuration，作為 delegated plugin 的輸入</li>
+<li>確保 delegated plugin 的 stderr 會輸出到 CNI plugin 的 stderr</li>
+</ul>
+</li>
+<li><p>當 plugin 執行 delete 和 check 時，必須執行所有的 delegated plugin，並將 delegated plugin 的錯誤回傳給 runtime</p>
+</li>
+<li><p>當 ADD 失敗時，plugin 應該在回傳錯誤前，先執行 delegated plugin 的 <code>DEL</code></p>
+</li>
+</ul>
+<h2 id="Section-5-Result-Types"><a href="#Section-5-Result-Types" class="headerlink" title="Section 5: Result Types"></a>Section 5: Result Types</h2><ul>
+<li>Plugin 的回傳結果使用 JSON 格式，並有三種<ul>
+<li>Success</li>
+<li>Error</li>
+<li>Version</li>
+</ul>
+</li>
+</ul>
+<h3 id="Success"><a href="#Success" class="headerlink" title="Success"></a>Success</h3><ul>
+<li>如果 plugin 的輸入包含 <code>prevResult</code>，輸出必須包含該欄位的值，並加上該 plugin 對網路修改的資訊，如果該 plugin 沒有任何操作，則該欄位必須保持原輸入內容。</li>
+</ul>
+<p>Success Type Result 的欄位如下</p>
+<ul>
+<li><p>cniVersion: 同輸入的 <code>cniVersion</code> 版本</p>
+</li>
+<li><p>interfaces: 一個該 plugin 建立的 interface 資訊的陣列，包含 host 的 interface。</p>
+<ul>
+<li>name: interface 的名子</li>
+<li>mac: interface 的 mac address</li>
+<li>sandbox: 該介面的網路環境參考，例如 network namespace 的路徑，如果是 host 介面則該欄位為空，容器內的介面該值應為 <code>CNI_NETNS</code></li>
+</ul>
+</li>
+<li><p>ips: 該 plugin 指定的 ip</p>
+<ul>
+<li>address: CIDR 格式的 ip address (e.g. 192.168.1.1&#x2F;24)</li>
+<li>gateway: default gateway (如果存在的話)</li>
+<li>interface: 介面的 index，對應到前述 interfaces 陣列</li>
+</ul>
+</li>
+<li><p>routes: plugin 建立的 routing rules</p>
+<ul>
+<li>dst: route 的目的 (CIDR)</li>
+<li>gw: nexthop 地址</li>
+</ul>
+</li>
+<li><p>dns</p>
+<ul>
+<li>nameservers: DNS server 位置陣列 (ipv4 或 ipv6 格式)</li>
+<li>domain: DNS 搜尋的 local domain</li>
+<li>search (list of strings): 有優先度的 search domain</li>
+<li>options (list of strings): 其他給 dns resolver 的參數</li>
+</ul>
+</li>
+<li><p>Delgated plugin 可能會忽略不需要的欄位</p>
+<ul>
+<li>IPAM 必須回傳一個 abbreviated Success Type result (忽略 interfaces 和 ips 裡面的 interface 欄位)</li>
+</ul>
+</li>
+</ul>
+<h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><p>plugin 回傳的錯誤資訊，欄位有 <code>cniVersion</code>, <code>code</code>, <code>msg</code>, <code>details</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">&#123;<br>  &quot;cniVersion&quot;: &quot;1.0.0&quot;,<br>  &quot;code&quot;: 7,<br>  &quot;msg&quot;: &quot;Invalid Configuration&quot;,<br>  &quot;details&quot;: &quot;Network 192.168.0.0/31 too small to allocate from.&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Error code 0-99 被保留給通用的錯誤，100 以上是 plugin 自定義的錯誤。</p>
+<table>
+<thead>
+<tr>
+<th>Error code</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>不支援的 CNI 版本</td>
+</tr>
+<tr>
+<td>2</td>
+<td>不支援的 network configuration 欄位，error message 會包含不支援的欄位名稱和數值</td>
+</tr>
+<tr>
+<td>3</td>
+<td>未知或不存在的容器，這個錯誤同時代表 runtime 不需要執行 DEL 之類的清理操作</td>
+</tr>
+<tr>
+<td>4</td>
+<td>無效的環境環境變數參數，error message 會包含無效的欄位名稱</td>
+</tr>
+<tr>
+<td>5</td>
+<td>IO 錯誤，例如無法讀取 stdin 的 execute configuration</td>
+</tr>
+<tr>
+<td>6</td>
+<td>解析錯誤，例如無效的 execute configuration JSON 格式</td>
+</tr>
+<tr>
+<td>7</td>
+<td>無效的 network configuration</td>
+</tr>
+<tr>
+<td>11</td>
+<td>稍後在嘗試，存在暫時無法操作的資源，runtime 應該稍後重試</td>
+</tr>
+</tbody></table>
+<ul>
+<li>此外，stderr 也可被用於非 JSON 結構的錯誤訊息，如 log</li>
+</ul>
+<h3 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h3><ul>
+<li>Version Type Result 的欄位如下<ul>
+<li>cniVersion: 同輸入的 <code>cniVersion</code> 版本</li>
+<li>supportedVersions: 一個支援的 CNI 版本陣列</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">&#123;<br>    &quot;cniVersion&quot;: &quot;1.0.0&quot;,<br>    &quot;supportedVersions&quot;: [ &quot;0.1.0&quot;, &quot;0.2.0&quot;, &quot;0.3.0&quot;, &quot;0.3.1&quot;, &quot;0.4.0&quot;, &quot;1.0.0&quot; ]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix:"></a>Appendix:</h2><p>在 CNI SPEC 裏面包含了一些 configuration 和執行過程中 plugin 輸入輸出的範例，可以參考 <a target="_blank" rel="noopener" href="https://github.com/containernetworking/cni/blob/spec-v1.0.0/SPEC.md#appendix-examples">原始文件</a><br>另外還有一份 CNI 的文件 <a target="_blank" rel="noopener" href="https://github.com/containernetworking/cni/blob/main/CONVENTIONS.md">CONVENTIONS</a>，描述許多 spec 裡面沒有定義但是許多 plugin 常用的欄位。</p>
+<h2 id="小節"><a href="#小節" class="headerlink" title="小節"></a>小節</h2><p>以上是對 <a target="_blank" rel="noopener" href="https://github.com/containernetworking/cni/blob/spec-v1.0.0/SPEC.md">CNI spec 1.0.0</a> 的導讀，希望對大家有幫助。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>CNI Spec 導讀</p><p><a href="https://blog.louisif.me/Kubernetes/CNI-Spec-Guiding/">https://blog.louisif.me/Kubernetes/CNI-Spec-Guiding/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Louis Li</p></div></div><div class="level-item is-narrow"><div><h6>發表於</h6><p>2022-09-05</p></div></div><div class="level-item is-narrow"><div><h6>更新於</h6><p>2022-09-05</p></div></div><div class="level-item is-narrow"><div><h6>許可協議</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/ONOS/ONOS-P4-Switch-Pipeconf-Development/"><span class="level-item">ONOS P4 Switch Pipeconf 開發</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">評論</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "b2118d1ddfcbd6ed743163351d4cccfb",
+            repo: "gamerslouis.github.io",
+            owner: "gamerslouis",
+            clientID: "cf78daa30b8e9f05c59c",
+            clientSecret: "118c8f1c02174173599308284f6f0c39f42a8de6",
+            admin: ["gamerslouis"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 10,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/mylogo.svg" alt="Louis Li"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Louis Li</p><p class="is-size-6 is-block">NYCU CS</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Hsinchu, Taiwan</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分類</p><a href="/categories"><p class="title">2</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">標籤</p><a href="/tags"><p class="title">1</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/gamerslouis" target="_blank" rel="noopener">追蹤</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/gamerslouis"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Mail" href="mailto:me@louisif.me"><i class="fas fa-envelope"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/atom.xml"><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Kubernetes/"><span class="level-start"><span class="level-item">Kubernetes</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/ONOS/"><span class="level-start"><span class="level-item">ONOS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-09-04T16:57:00.000Z">2022-09-05</time></p><p class="title"><a href="/Kubernetes/CNI-Spec-Guiding/">CNI Spec 導讀</a></p><p class="categories"><a href="/categories/Kubernetes/">Kubernetes</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-08-27T16:25:46.000Z">2022-08-28</time></p><p class="title"><a href="/ONOS/ONOS-P4-Switch-Pipeconf-Development/">ONOS P4 Switch Pipeconf 開發</a></p><p class="categories"><a href="/categories/ONOS/">ONOS</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-08-12T03:26:42.000Z">2022-08-12</time></p><p class="title"><a href="/ONOS/Analyze-why-ONOS-Packet-Processor-Treatment-not-Work/">分析 ONOS Packet Processor Treatment 無效之原因</a></p><p class="categories"><a href="/categories/ONOS/">ONOS</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2022/09/"><span class="level-start"><span class="level-item">九月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/08/"><span class="level-start"><span class="level-item">八月 2022</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/P4/"><span class="tag">P4</span><span class="tag">1</span></a></div></div></div></div></div><div class="column-right-shadow is-hidden-widescreen is-sticky"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">文章目錄</h3><ul class="menu-list"><li><a class="level is-mobile" href="#前言"><span class="level-left"><span class="level-item">1</span><span class="level-item">前言</span></span></a></li><li><a class="level is-mobile" href="#Overview"><span class="level-left"><span class="level-item">2</span><span class="level-item">Overview</span></span></a></li><li><a class="level is-mobile" href="#Section-1-Network-configuration-format"><span class="level-left"><span class="level-item">3</span><span class="level-item">Section 1: Network configuration format</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Plugin-configuration-object"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">Plugin configuration object</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Section-2-Execution-Protocol"><span class="level-left"><span class="level-item">4</span><span class="level-item">Section 2: Execution Protocol</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Parameters"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">Parameters</span></span></a></li><li><a class="level is-mobile" href="#Errors"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">Errors</span></span></a></li><li><a class="level is-mobile" href="#CNI-operations"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">CNI operations</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#ADD"><span class="level-left"><span class="level-item">4.3.1</span><span class="level-item">ADD</span></span></a></li><li><a class="level is-mobile" href="#DEL"><span class="level-left"><span class="level-item">4.3.2</span><span class="level-item">DEL</span></span></a></li><li><a class="level is-mobile" href="#CHECK"><span class="level-left"><span class="level-item">4.3.3</span><span class="level-item">CHECK</span></span></a></li><li><a class="level is-mobile" href="#VERSION"><span class="level-left"><span class="level-item">4.3.4</span><span class="level-item">VERSION</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#Section-3-Execution-of-Network-Configurations"><span class="level-left"><span class="level-item">5</span><span class="level-item">Section 3: Execution of Network Configurations</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#生命週期"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">生命週期</span></span></a></li><li><a class="level is-mobile" href="#Attachment-Parameters"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">Attachment Parameters</span></span></a></li><li><a class="level is-mobile" href="#Adding-an-attachment"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">Adding an attachment</span></span></a></li><li><a class="level is-mobile" href="#Deleting-an-attachment"><span class="level-left"><span class="level-item">5.4</span><span class="level-item">Deleting an attachment</span></span></a></li><li><a class="level is-mobile" href="#Checking-an-attachment"><span class="level-left"><span class="level-item">5.5</span><span class="level-item">Checking an attachment</span></span></a></li><li><a class="level is-mobile" href="#Deriving-execution-configuration-from-plugin-configuration"><span class="level-left"><span class="level-item">5.6</span><span class="level-item">Deriving execution configuration from plugin configuration</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Deriving-runtimeConfig"><span class="level-left"><span class="level-item">5.6.1</span><span class="level-item">Deriving runtimeConfig</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#Section-4-Plugin-Delegation"><span class="level-left"><span class="level-item">6</span><span class="level-item">Section 4: Plugin Delegation</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Delegated-Plugin-protocol"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">Delegated Plugin protocol</span></span></a></li><li><a class="level is-mobile" href="#Delegated-plugin-execution-procedure"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">Delegated plugin execution procedure</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Section-5-Result-Types"><span class="level-left"><span class="level-item">7</span><span class="level-item">Section 5: Result Types</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Success"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">Success</span></span></a></li><li><a class="level is-mobile" href="#Error"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">Error</span></span></a></li><li><a class="level is-mobile" href="#Version"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">Version</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Appendix"><span class="level-left"><span class="level-item">8</span><span class="level-item">Appendix:</span></span></a></li><li><a class="level is-mobile" href="#小節"><span class="level-left"><span class="level-item">9</span><span class="level-item">小節</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/mylogo.svg" alt="Louis Li&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2022 Louis Li</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>個訪客</span></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-TW");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到頁首" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此網站使用Cookie來改善您的體驗。",
+          dismiss: "知道了！",
+          allow: "允許使用Cookie",
+          deny: "拒絕",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="請輸入關鍵字..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"請輸入關鍵字...","untitled":"(無標題)","posts":"文章","pages":"頁面","categories":"分類","tags":"標籤"});
+        });</script></body></html>
