@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.louisif.me/Terraform/Deploy-proxmox-vm-with-terraform/</loc>
+    
+    <lastmod>2022-10-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-1-Network-Architecure-and-Config/</loc>
     
     <lastmod>2022-10-04</lastmod>
@@ -58,7 +67,7 @@
 
   <url>
     <loc>https://blog.louisif.me/</loc>
-    <lastmod>2022-10-04</lastmod>
+    <lastmod>2022-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -66,7 +75,14 @@
   
   <url>
     <loc>https://blog.louisif.me/tags/P4/</loc>
-    <lastmod>2022-10-04</lastmod>
+    <lastmod>2022-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/IaC-Terraform-Proxmox/</loc>
+    <lastmod>2022-10-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -75,21 +91,28 @@
   
   <url>
     <loc>https://blog.louisif.me/categories/ONOS/</loc>
-    <lastmod>2022-10-04</lastmod>
+    <lastmod>2022-10-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.louisif.me/categories/Openstack/</loc>
-    <lastmod>2022-10-04</lastmod>
+    <lastmod>2022-10-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.louisif.me/categories/Kubernetes/</loc>
-    <lastmod>2022-10-04</lastmod>
+    <lastmod>2022-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/categories/Terraform/</loc>
+    <lastmod>2022-10-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
