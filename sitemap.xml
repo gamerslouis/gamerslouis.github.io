@@ -2,9 +2,81 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.louisif.me/Terraform/Deploy-proxmox-vm-with-terraform/</loc>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/</loc>
     
-    <lastmod>2022-10-28</lastmod>
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-8-cgroups-socket-map/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-7-tc-BCC-neighbor-sharing/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-6-XDP-BCC-xdp-redirect-map/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-4-BCC-tcpconnect/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-5-BCC-HTTP-Filter-Socket-Filter/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-3-Introduction-to-BCC/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-2-Basic-concept/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/eBPF/Learn-eBPF-Serial-1-Abstract-and-Background/</loc>
+    
+    <lastmod>2022-10-31</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +85,16 @@
   <url>
     <loc>https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-1-Network-Architecure-and-Config/</loc>
     
-    <lastmod>2022-10-04</lastmod>
+    <lastmod>2022-10-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/Terraform/Deploy-proxmox-vm-with-terraform/</loc>
+    
+    <lastmod>2022-10-28</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -67,7 +148,7 @@
 
   <url>
     <loc>https://blog.louisif.me/</loc>
-    <lastmod>2022-10-28</lastmod>
+    <lastmod>2022-10-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -75,14 +156,77 @@
   
   <url>
     <loc>https://blog.louisif.me/tags/P4/</loc>
-    <lastmod>2022-10-28</lastmod>
+    <lastmod>2022-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.louisif.me/tags/IaC-Terraform-Proxmox/</loc>
-    <lastmod>2022-10-28</lastmod>
+    <loc>https://blog.louisif.me/tags/eBPF/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/IaC/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/Terraform/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/Proxmox/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/linux/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/bcc/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/xdp/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/tc/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/cgroups/</loc>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/tags/socketmap/</loc>
+    <lastmod>2022-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -91,28 +235,35 @@
   
   <url>
     <loc>https://blog.louisif.me/categories/ONOS/</loc>
-    <lastmod>2022-10-28</lastmod>
+    <lastmod>2022-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.louisif.me/categories/Openstack/</loc>
-    <lastmod>2022-10-28</lastmod>
+    <lastmod>2022-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.louisif.me/categories/Kubernetes/</loc>
-    <lastmod>2022-10-28</lastmod>
+    <lastmod>2022-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.louisif.me/categories/Terraform/</loc>
-    <lastmod>2022-10-28</lastmod>
+    <lastmod>2022-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.louisif.me/categories/eBPF/</loc>
+    <lastmod>2022-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

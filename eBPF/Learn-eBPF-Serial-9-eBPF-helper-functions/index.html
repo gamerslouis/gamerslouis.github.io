@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>學習 eBPF 系列 9 - eBPF helper functions - Louis Li&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Louis Li&#039;s Blog"><meta name="msapplication-TileImage" content="/img/mylogo.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Louis Li&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本篇是本系列文章的最後一篇，在 eBPF 程式裡面要與 kernel 交互很重要的是 helper function，因此在最後的兩天時間，我們要把所有的 helper function 速覽過一遍。這邊介紹以 bpf-helper 的 man 文件 的內容為主，部分的 helper function 可能因為文件更新而有遺漏。"><meta property="og:type" content="blog"><meta property="og:title" content="學習 eBPF 系列 9 - eBPF helper functions"><meta property="og:url" content="https://blog.louisif.me/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/"><meta property="og:site_name" content="Louis Li&#039;s Blog"><meta property="og:description" content="本篇是本系列文章的最後一篇，在 eBPF 程式裡面要與 kernel 交互很重要的是 helper function，因此在最後的兩天時間，我們要把所有的 helper function 速覽過一遍。這邊介紹以 bpf-helper 的 man 文件 的內容為主，部分的 helper function 可能因為文件更新而有遺漏。"><meta property="og:locale" content="zh_TW"><meta property="og:image" content="https://blog.louisif.me/img/my_og_image.png"><meta property="article:published_time" content="2022-10-31T10:14:40.000Z"><meta property="article:modified_time" content="2022-10-31T10:33:52.590Z"><meta property="article:author" content="Louis Li"><meta property="article:tag" content="eBPF"><meta property="article:tag" content="linux"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.louisif.me/img/my_og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.louisif.me/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/"},"headline":"學習 eBPF 系列 9 - eBPF helper functions","image":["https://blog.louisif.me/img/og_image.png"],"datePublished":"2022-10-31T10:14:40.000Z","dateModified":"2022-10-31T10:33:52.590Z","author":{"@type":"Person","name":"Louis Li"},"publisher":{"@type":"Organization","name":"Louis Li's Blog","logo":{"@type":"ImageObject","url":"https://blog.louisif.me/img/mylogo.svg"}},"description":"本篇是本系列文章的最後一篇，在 eBPF 程式裡面要與 kernel 交互很重要的是 helper function，因此在最後的兩天時間，我們要把所有的 helper function 速覽過一遍。這邊介紹以 bpf-helper 的 man 文件 的內容為主，部分的 helper function 可能因為文件更新而有遺漏。"}</script><link rel="canonical" href="https://blog.louisif.me/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/"><link rel="alternate" href="/atom.xml" title="Louis Li&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/mylogo.svg"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.6.0/styles/atom-one-dark-reasonable.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-79VDS4QY8D" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-79VDS4QY8D');</script><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/mylogo.svg" alt="Louis Li&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/archives">Archives</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="文章目錄" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><p class="level-item is-flex justify-content-center"><i class="fas fa-calendar mr-1"></i><span><time dateTime="2022-10-31T10:14:40.000Z" title="10/31/2022, 6:14:40 PM">2022-10-31</time>發表</span></p><p class="level-item is-flex justify-content-center"><i class="fas fa-folder mr-1"></i><span><a class="link-muted" href="/categories/eBPF/">eBPF</a></span></p><p class="level-item is-flex justify-content-center"><i class="fas fa-clock mr-1"></i><span>14 分鐘讀完 (大約2122個字)</span></p><p class="level-item is-flex justify-content-center"><i class="fas fa-person mr-1"></i><span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次訪問</span></p></div></div><h1 class="title is-3 is-size-4-mobile">學習 eBPF 系列 9 - eBPF helper functions</h1><div class="content"><p>本篇是本系列文章的最後一篇，在 eBPF 程式裡面要與 kernel 交互很重要的是 helper function，因此在最後的兩天時間，我們要把所有的 helper function 速覽過一遍。這邊介紹以 bpf-helper 的 <a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/man7/bpf-helpers.7.html">man 文件</a> 的內容為主，部分的 helper function 可能因為文件更新而有遺漏。</p>
+<span id="more"></span>
+
+<p>接下來的介紹會稍微對 helper function 做一定程度的分類，但是具體不同的 eBPF program type 支援那些 helper function 可能還是要根據 <a target="_blank" rel="noopener" href="https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md">bcc 文件</a>、每個 helper function 對應的 commit 資訊等查詢。</p>
+<h2 id="eBPF-map-操作類"><a href="#eBPF-map-操作類" class="headerlink" title="eBPF map 操作類"></a>eBPF map 操作類</h2><ul>
+<li><p>array, map 類型 map 的操作函數，對應到查詢、插入或更新、刪除 map 內的元素。其中 update 可以透過 flag (<code>BPF_NOEXIST</code>, <code>BPF_EXIST</code>, <code>BPF_ANY</code>) 決定 key 是不是不能先存在或一定要存在於 map 內。</p>
+<ul>
+<li>bpf_map_lookup_elem</li>
+<li>bpf_map_update_elem</li>
+<li>bpf_map_delete_elem</li>
+</ul>
+</li>
+<li><p>用於 stack, queue 類型 map 的操作函數。</p>
+<ul>
+<li>bpf_map_peek_elem</li>
+<li>bpf_map_pop_elem</li>
+<li>bpf_map_push_elem</li>
+</ul>
+</li>
+<li><p>用於 ringbuff 的操作函數 (改進原本 perf event map 的問題)</p>
+<ul>
+<li>bpf_ringbuf_output</li>
+<li>bpf_ringbuf_reserve</li>
+<li>bpf_ringbuf_submit</li>
+<li>bpf_ringbuf_discard</li>
+<li>bpf_ringbuf_query</li>
+</ul>
+</li>
+</ul>
+<h2 id="通用函數"><a href="#通用函數" class="headerlink" title="通用函數"></a>通用函數</h2><ul>
+<li><p>生成隨機數</p>
+<ul>
+<li>get_prandom_u32</li>
+</ul>
+</li>
+<li><p><code>atol</code>, <code>atoul</code></p>
+<ul>
+<li>bpf_strtol</li>
+<li>bpf_strtoul</li>
+</ul>
+</li>
+<li><p>取得當前執行 eBPF 程式的 (SMP) processor ID。由於 eBPF 是 no preemption 的所以在整個執行過程中 processor id 不會變。</p>
+<ul>
+<li>bpf_get_smp_processor_id</li>
+</ul>
+</li>
+<li><p>取得當前 NUMA (Non-uniform memory access) 的 node id。受於匯流排限制，CPU 核心可以比較快存取同節點上的 memory，透過 node id 區分。通常是當 attach 的 socket 有啟用 <code>SO_ATTACH_REUSEPORT_EBPF</code> 選項時會用到。</p>
+<ul>
+<li>bpf_get_numa_node_id</li>
+</ul>
+</li>
+<li><p>搭配 <code>BPF_MAP_TYPE_PROG_ARRAY</code> map 去執行 tail call。</p>
+<ul>
+<li>bpf_tail_call</li>
+</ul>
+</li>
+<li><p>取得開機到當下經過的時間，單位是 ns，差別在於後者會多包含 suspend (暫停) 的時間</p>
+<ul>
+<li>bpf_ktime_get_ns</li>
+<li>bpf_ktime_get_boot_ns</li>
+</ul>
+</li>
+<li><p>取得 jiffies64</p>
+<ul>
+<li>bpf_jiffies64</li>
+</ul>
+</li>
+<li><p>將字串訊息發送到 &#x2F;sys&#x2F;kernel&#x2F;debug&#x2F;tracing&#x2F;trace ，主要用於開發除錯</p>
+<ul>
+<li>bpf_trace_printk</li>
+</ul>
+</li>
+<li><p>寫入 seq_file</p>
+<ul>
+<li>bpf_seq_write</li>
+<li>bpf_seq_printf</li>
+</ul>
+</li>
+<li><p>搭配 <code>struct bpf_spin_lock</code> 提供一個給 <code>BPF_MAP_TYPE_HASH</code> 和 <code>BPF_MAP_TYPE_ARRAY</code>(目前只支援這兩著) 裡面 value 使用的 lock，由於一個 map 裡面只能有一個 spin_lock，所以通常是使用把之前提過，整個 map 固定只有一個元素，把整個 map 當作一個 global variable 的用法</p>
+<ul>
+<li>bpf_spin_lock</li>
+<li>bpf_spin_unlock</li>
+</ul>
+</li>
+<li><p>搭配 <code>BPF_MAP_TYPE_PERF_EVENT_ARRAY</code> 使用，傳輸資料到 user space</p>
+<ul>
+<li>bpf_perf_event_output</li>
+</ul>
+</li>
+</ul>
+<h2 id="Tracing-相關-kprobe-tracepoint-perf-event"><a href="#Tracing-相關-kprobe-tracepoint-perf-event" class="headerlink" title="Tracing 相關 (kprobe, tracepoint, perf event)"></a>Tracing 相關 (kprobe, tracepoint, perf event)</h2><ul>
+<li><p>取得當前的 tgid, uid, gid, command name, task structure</p>
+<ul>
+<li>bpf_get_current_pid_tgid</li>
+<li>bpf_get_current_uid_gid</li>
+<li>bpf_get_current_comm</li>
+<li>bpf_get_current_task</li>
+</ul>
+</li>
+<li><p>發 signal 到當前 (process, thread)</p>
+<ul>
+<li>bpf_send_signal</li>
+<li>bpf_send_signal_thread</li>
+</ul>
+</li>
+<li><p>用於讀取記憶體資料、字串及寫入記憶體。帶 user 的版本用於 user space memory，其餘用於 kernel space memory。</p>
+<ul>
+<li>bpf_probe_read (通常使用後倆著)</li>
+<li>bpf_probe_read_user</li>
+<li>bpf_probe_read_kernel</li>
+<li>bpf_probe_read_str (通常使用後倆著)</li>
+<li>bpf_probe_read_user_str</li>
+<li>bpf_probe_read_kernel_str</li>
+<li>bpf_probe_write_user</li>
+</ul>
+</li>
+<li><p>搭配 <code>BPF_MAP_TYPE_STACK_TRACE</code> 使用，取得一個 stack address hash 過的 stack id</p>
+<ul>
+<li>bpf_get_stackid</li>
+</ul>
+</li>
+<li><p>取得 userspace 或 kernel space 的 stack 資料</p>
+<ul>
+<li>bpf_get_stack</li>
+<li>bpf_get_task_stack</li>
+</ul>
+</li>
+<li><p>搭配 <code>BPF_MAP_TYPE_PERF_EVENT_ARRAY</code> 取得 perf-event counter 的讀數</p>
+<ul>
+<li>bpf_perf_event_read</li>
+<li>bpf_perf_event_read_value (建議使用)</li>
+</ul>
+</li>
+<li><p>用於 <code>BPF_PROG_TYPE_PERF_EVENT</code> 取得 struct perf_branch_entry</p>
+<ul>
+<li>bpf_read_branch_records</li>
+</ul>
+</li>
+<li><p>搭配 <code>BPF_MAP_TYPE_CGROUP_ARRAY</code> 使用，檢查是否在某個 cgroup v2 節點內</p>
+<ul>
+<li>bpf_current_task_under_cgroup</li>
+</ul>
+</li>
+<li><p>查看當前上下文的 cgroup 節點的祖先節點 id</p>
+<ul>
+<li>bpf_get_current_ancestor_cgroup_id</li>
+</ul>
+</li>
+<li><p>取得當前上下文對應的 cgroup id</p>
+<ul>
+<li>bpf_get_current_cgroup_id</li>
+</ul>
+</li>
+<li><p>用於 kprobe，修改函數回傳值</p>
+<ul>
+<li>bpf_override_return</li>
+</ul>
+</li>
+</ul>
+<h3 id="Cgroup-相關"><a href="#Cgroup-相關" class="headerlink" title="Cgroup 相關"></a>Cgroup 相關</h3><ul>
+<li><p>取得一個當前 network namespace 對應的 cookie (identifer)</p>
+<ul>
+<li>bpf_get_netns_cookie</li>
+</ul>
+</li>
+<li><p>取得 local storage 的指標 (cgroup 相關可使用的一個儲存區)</p>
+<ul>
+<li>bpf_get_local_storage</li>
+</ul>
+</li>
+<li><p>用於 <code>BPF_PROG_TYPE_CGROUP_SYSCTL</code></p>
+<ul>
+<li>取得、更新 sysctl 資訊<ul>
+<li>bpf_sysctl_get_name</li>
+<li>bpf_sysctl_get_current_value</li>
+<li>bpf_sysctl_get_new_value</li>
+<li>bpf_sysctl_set_new_value</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="其他類別"><a href="#其他類別" class="headerlink" title="其他類別"></a>其他類別</h2><ul>
+<li>LIRC 紅外線收發相關 (BPF_PROG_TYPE_LIRC_MODE2)<ul>
+<li>bpf_rc_repeat </li>
+<li>bpf_rc_keydown</li>
+<li>bpf_rc_pointer_rel</li>
+</ul>
+</li>
+</ul>
+<h2 id="XDP-相關"><a href="#XDP-相關" class="headerlink" title="XDP 相關"></a>XDP 相關</h2><ul>
+<li><p>於 XDP 修改封包大小 (可以增大或縮小)</p>
+<ul>
+<li>bpf_xdp_adjust_head</li>
+<li>bpf_xdp_adjust_tail</li>
+</ul>
+</li>
+<li><p>XDP_TX redirect 使用</p>
+<ul>
+<li>bpf_redirect_map</li>
+</ul>
+</li>
+<li><p>XDP 輸出封包內容到 perf event</p>
+<ul>
+<li>bpf_xdp_output</li>
+</ul>
+</li>
+<li><p>調整 <code>xdp_md-&gt;data_meta</code></p>
+<ul>
+<li>bpf_xdp_adjust_meta</li>
+</ul>
+</li>
+<li><p>查詢 fid (Forward Information Base, L2)</p>
+<ul>
+<li>bpf_fib_lookup (也可用在 TC)</li>
+</ul>
+</li>
+</ul>
+<h2 id="LWT-相關"><a href="#LWT-相關" class="headerlink" title="LWT 相關"></a>LWT 相關</h2><ul>
+<li>attach 在 routing table<ul>
+<li>替 L3 封包進行 tunnel header encap<ul>
+<li>bpf_lwt_push_encap</li>
+</ul>
+</li>
+<li>外封包 (underlay) 內容修改<ul>
+<li>bpf_lwt_seg6_store_bytes</li>
+<li>bpf_lwt_seg6_adjust_srh</li>
+</ul>
+</li>
+<li>套用 IPv6 Segment Routing action 決策<ul>
+<li>bpf_lwt_seg6_action</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="socket-socket-buffer-相關"><a href="#socket-socket-buffer-相關" class="headerlink" title="socket, socket buffer 相關"></a>socket, socket buffer 相關</h2><ul>
+<li><p>用於 <code>BPF_PROG_TYPE_CGROUP_SOCK_ADDR</code>，修改 bind address</p>
+<ul>
+<li>bpf_bind</li>
+</ul>
+</li>
+<li><p>讀取封包內容</p>
+<ul>
+<li>bpf_skb_load_bytes</li>
+<li>bpf_skb_load_bytes_relative</li>
+</ul>
+</li>
+<li><p>修改封包內容，可自動更新 chekcsum</p>
+<ul>
+<li>bpf_skb_store_bytes</li>
+</ul>
+</li>
+<li><p>改寫 l3, l4 的 checksum</p>
+<ul>
+<li>bpf_l3_csum_replace</li>
+<li>bpf_l4_csum_replace</li>
+</ul>
+</li>
+<li><p>用於計算 check sum，可搭配前兩個 replace 函數使用</p>
+<ul>
+<li>bpf_csum_diff</li>
+</ul>
+</li>
+<li><p>取得 xfrm (IPsec 相關)</p>
+<ul>
+<li>bpf_skb_get_xfrm_state</li>
+</ul>
+</li>
+<li><p>將封包發到其他的 device。後者會複製一分封包。</p>
+<ul>
+<li>bpf_redirect</li>
+<li>bpf_clone_redirect</li>
+</ul>
+</li>
+<li><p>取得 classid，參考 cgroup 的 net_cls，使用於 TC egress path。</p>
+<ul>
+<li>bpf_get_cgroup_classid</li>
+</ul>
+</li>
+<li><p>增減 vlan header</p>
+<ul>
+<li>bpf_skb_vlan_push</li>
+<li>bpf_skb_vlan_pop</li>
+</ul>
+</li>
+<li><p>取得、修改封包的 tunnel (ex. GRE) 的 tunnel key 資訊</p>
+<ul>
+<li>bpf_skb_get_tunnel_key</li>
+<li>bpf_skb_set_tunnel_key</li>
+</ul>
+</li>
+<li><p>取得、修改封包的 tunnel 資訊</p>
+<ul>
+<li>bpf_skb_get_tunnel_opt</li>
+<li>bpf_skb_set_tunnel_opt</li>
+</ul>
+</li>
+<li><p>取得 skb 的 tclassid 欄位，用於 clsact TC egress</p>
+<ul>
+<li>bpf_get_route_realm</li>
+</ul>
+</li>
+<li><p>修改封包 prtocol (ipv4, ipv6)</p>
+<ul>
+<li>bpf_skb_change_proto</li>
+</ul>
+</li>
+<li><p>修改封包類型 (broadcast, multicast, unitcast..)</p>
+<ul>
+<li>bpf_skb_change_type</li>
+</ul>
+</li>
+<li><p>搭配 <code>BPF_MAP_TYPE_CGROUP_ARRAY</code> 使用，檢查 skb 是不是在某個 cgroup v2 節點的子節點內。</p>
+<ul>
+<li>bpf_skb_under_cgroup</li>
+</ul>
+</li>
+<li><p>取得 skb 對應的 cgroup id</p>
+<ul>
+<li>bpf_skb_cgroup_id</li>
+</ul>
+</li>
+<li><p>向上查找 skb 對應 cgroup 節點的祖先節點 id</p>
+<ul>
+<li>bpf_sk_ancestor_cgroup_id</li>
+</ul>
+</li>
+<li><p>取得、修改 <code>skb-&gt;hash</code></p>
+<ul>
+<li>bpf_get_hash_recalc</li>
+<li>bpf_set_hash</li>
+</ul>
+</li>
+<li><p>修改封包大小</p>
+<ul>
+<li>bpf_skb_change_tail</li>
+</ul>
+</li>
+<li><p>用於封包 payload 存取，具體內容有點難理解 (non-linear data)</p>
+<ul>
+<li>bpf_skb_pull_data</li>
+</ul>
+</li>
+<li><p>修改 <code>skb-&gt;csum</code></p>
+<ul>
+<li>bpf_csum_update</li>
+</ul>
+</li>
+<li><p>修改 <code>skb-&gt;csum_level</code></p>
+<ul>
+<li>bpf_csum_level</li>
+</ul>
+</li>
+<li><p>標註 <code>skb-&gt;hash</code> 為無效，觸發重算</p>
+<ul>
+<li>bpf_set_hash_invalid</li>
+</ul>
+</li>
+<li><p>將 <code>skb-&gt;sk</code> 轉成所有欄位都可以訪問的版本</p>
+<ul>
+<li>bpf_sk_fullsock</li>
+</ul>
+</li>
+<li><p>從 <code>skb-&gt;sk</code> 取得 <code>struct bpf_tcp_sock</code></p>
+<ul>
+<li>bpf_tcp_sock</li>
+</ul>
+</li>
+<li><p>向 tcp-sock 對應的方向發一個 tcp-ack</p>
+<ul>
+<li>bpf_tcp_send_ack</li>
+</ul>
+</li>
+<li><p>從 <code>skb-&gt;sk</code> 取得 <code>bpf_sock</code> </p>
+<ul>
+<li>bpf_get_listener_sock</li>
+</ul>
+</li>
+<li><p>設置 <code>skb-&gt;sk</code></p>
+<ul>
+<li>bpf_sk_assign</li>
+</ul>
+</li>
+<li><p>取得 bpf_sock 對應的 cgroupv2 id</p>
+<ul>
+<li>bpf_sk_cgroup_id</li>
+</ul>
+</li>
+<li><p>取得 bpf_sock 對應 cgroupv2 節點的祖先 id</p>
+<ul>
+<li>bpf_sk_ancestor_cgroup_id</li>
+</ul>
+</li>
+<li><p>強制轉型 sk 成特定的 XXX_sock 結構</p>
+<ul>
+<li>bpf_skc_to_tcp6_sock</li>
+<li>bpf_skc_to_tcp_sock</li>
+<li>bpf_skc_to_tcp_timewait_sock</li>
+<li>bpf_skc_to_tcp_request_sock</li>
+<li>bpf_skc_to_udp6_sock</li>
+</ul>
+</li>
+<li><p>增加 packet header 區 (headroom) 長度，用於為 L3 封包直接加上 L2 的 header</p>
+<ul>
+<li>bpf_skb_change_head</li>
+</ul>
+</li>
+<li><p>幫 socket 建立一個 cookie，作為 socket 的 identifier，用於追蹤</p>
+<ul>
+<li>bpf_get_socket_cookie (sk_buff)</li>
+<li>bpf_get_socket_cookie (bpf_sock_addr)</li>
+<li>bpf_get_socket_cookie (bpf_sock_ops)</li>
+</ul>
+</li>
+<li><p>取得 socket 的 owner UID</p>
+<ul>
+<li>bpf_get_socket_uid</li>
+</ul>
+</li>
+<li><p>模擬呼叫 getsocketopt、setsockopt</p>
+<ul>
+<li>bpf_getsockopt</li>
+<li>bpf_setsockopt</li>
+</ul>
+</li>
+<li><p>存取 skb 的 ebpf local storage</p>
+<ul>
+<li>bpf_sk_storage_get</li>
+<li>bpf_sk_storage_delete</li>
+</ul>
+</li>
+<li><p>將封包內容輸出到 perf event</p>
+<ul>
+<li>bpf_skb_output</li>
+</ul>
+</li>
+<li><p>修改封包 payload 大小，可以從 L2 或 L3 的角度來看</p>
+<ul>
+<li>bpf_skb_adjust_room</li>
+</ul>
+</li>
+<li><p>產生、尋找封包對應的 <code>SYN cookie ACK</code><br>  + bpf_tcp_gen_syncookie<br>  + bpf_tcp_check_syncookie</p>
+</li>
+<li><p><code>BPF_PROG_TYPE_SK_SKB</code> (ingress 方向)</p>
+<ul>
+<li>搭配 <code>BPF_MAP_TYPE_SOCKMAP</code> 做 socket redierct <ul>
+<li>bpf_sk_redirect_map</li>
+<li>bpf_sk_redirect_hash</li>
+</ul>
+</li>
+<li>搜尋滿足對應 5-tuple 的 socket<ul>
+<li>bpf_sk_lookup_tcp</li>
+<li>bpf_skc_lookup_tcp</li>
+<li>bpf_sk_lookup_udp</li>
+</ul>
+</li>
+<li>釋放上面兩個找到的 socket 的 reference<ul>
+<li>bpf_sk_release</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>BPF_PROG_TYPE_SK_MSG</code> (egress 方向)</p>
+<ul>
+<li>搭配 <code>BPF_MAP_TYPE_SOCKMAP</code> 做 socket redierct<ul>
+<li>bpf_msg_redirect_map</li>
+<li>bpf_msg_redirect_hash</li>
+</ul>
+</li>
+<li>替特定長度的內容作 verdict (SK_PASS…)，可用於截短封包，優化處理速度 (tc 相關的東西不太熟…&#x2F;)<ul>
+<li>bpf_msg_apply_bytes</li>
+</ul>
+</li>
+<li>跳過接下來某長度的內容不做 veridct<ul>
+<li>bpf_msg_cork_bytes</li>
+</ul>
+</li>
+<li>讀寫修改特定長度的資料<ul>
+<li>bpf_msg_pull_data</li>
+<li>bpf_msg_pop_data</li>
+<li>bpf_msg_push_data</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>更新 <code>BPF_MAP_TYPE_SOCKMAP</code> </p>
+<ul>
+<li>bpf_sock_map_update</li>
+</ul>
+</li>
+<li><p>設置 <code>bpf_sock_ops-&gt;bpf_sock_ops_cb_flags</code> 欄位</p>
+<ul>
+<li>bpf_sock_ops_cb_flags_set</li>
+</ul>
+</li>
+<li><p>更新 sockhash</p>
+<ul>
+<li>bpf_sock_hash_update</li>
+</ul>
+</li>
+<li><p>用於 <code>BPF_PROG_TYPE_SK_REUSEPORT</code>(將多個程式綁定在同一個 port 上)</p>
+<ul>
+<li>sk_select_reuseport</li>
+</ul>
+</li>
+<li><p>用於 <code>BPF_PROG_TYPE_CGROUP_SKB</code>，設置 ECN (Explicit Congestion Notification)</p>
+<ul>
+<li>bpf_skb_ecn_set_ce</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>學習 eBPF 系列 9 - eBPF helper functions</p><p><a href="https://blog.louisif.me/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/">https://blog.louisif.me/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Louis Li</p></div></div><div class="level-item is-narrow"><div><h6>發表於</h6><p>2022-10-31</p></div></div><div class="level-item is-narrow"><div><h6>更新於</h6><p>2022-10-31</p></div></div><div class="level-item is-narrow"><div><h6>許可協議</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/eBPF/">eBPF</a><a class="link-muted mr-2" rel="tag" href="/tags/linux/">linux</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/eBPF/Learn-eBPF-Serial-8-cgroups-socket-map/"><span class="level-item">學習 eBPF 系列 8 - cgroups &amp; socket map</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">評論</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://blog.louisif.me/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/';
+            this.page.identifier = 'eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'louis-lis-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/mylogo.svg" alt="Louis Li"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Louis Li</p><p class="is-size-6 is-block">NYCU CS</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Hsinchu, Taiwan</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">14</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分類</p><a href="/categories"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">標籤</p><a href="/tags"><p class="title">11</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/gamerslouis" target="_blank" rel="noopener">追蹤</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/gamerslouis"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Mail" href="mailto:me@louisif.me"><i class="fas fa-envelope"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/atom.xml"><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Kubernetes/"><span class="level-start"><span class="level-item">Kubernetes</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/ONOS/"><span class="level-start"><span class="level-item">ONOS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Openstack/"><span class="level-start"><span class="level-item">Openstack</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Terraform/"><span class="level-start"><span class="level-item">Terraform</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/eBPF/"><span class="level-start"><span class="level-item">eBPF</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-10-31T10:14:40.000Z">2022-10-31</time></p><p class="title"><a href="/eBPF/Learn-eBPF-Serial-9-eBPF-helper-functions/">學習 eBPF 系列 9 - eBPF helper functions</a></p><p class="categories"><a href="/categories/eBPF/">eBPF</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-10-31T09:39:47.000Z">2022-10-31</time></p><p class="title"><a href="/eBPF/Learn-eBPF-Serial-8-cgroups-socket-map/">學習 eBPF 系列 8 - cgroups &amp; socket map</a></p><p class="categories"><a href="/categories/eBPF/">eBPF</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-10-31T09:16:36.000Z">2022-10-31</time></p><p class="title"><a href="/eBPF/Learn-eBPF-Serial-7-tc-BCC-neighbor-sharing/">學習 eBPF 系列 7 - tc &amp; BCC neighbor_sharing</a></p><p class="categories"><a href="/categories/eBPF/">eBPF</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-10-31T09:00:33.000Z">2022-10-31</time></p><p class="title"><a href="/eBPF/Learn-eBPF-Serial-6-XDP-BCC-xdp-redirect-map/">學習 eBPF 系列 6 - XDP &amp; BCC xdp_redirect_map</a></p><p class="categories"><a href="/categories/eBPF/">eBPF</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-10-31T08:18:42.000Z">2022-10-31</time></p><p class="title"><a href="/eBPF/Learn-eBPF-Serial-5-BCC-HTTP-Filter-Socket-Filter/">學習 eBPF 系列 5 - BCC HTTP Filter &amp; Socket Filter</a></p><p class="categories"><a href="/categories/eBPF/">eBPF</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2022/10/"><span class="level-start"><span class="level-item">十月 2022</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/09/"><span class="level-start"><span class="level-item">九月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/08/"><span class="level-start"><span class="level-item">八月 2022</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/IaC/"><span class="tag">IaC</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/P4/"><span class="tag">P4</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Proxmox/"><span class="tag">Proxmox</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Terraform/"><span class="tag">Terraform</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/bcc/"><span class="tag">bcc</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/cgroups/"><span class="tag">cgroups</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/eBPF/"><span class="tag">eBPF</span><span class="tag">9</span></a></div><div class="control"><a class="tags has-addons" href="/tags/linux/"><span class="tag">linux</span><span class="tag">9</span></a></div><div class="control"><a class="tags has-addons" href="/tags/socketmap/"><span class="tag">socketmap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/tc/"><span class="tag">tc</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/xdp/"><span class="tag">xdp</span><span class="tag">1</span></a></div></div></div></div></div><div class="column-right-shadow is-hidden-widescreen is-sticky"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">文章目錄</h3><ul class="menu-list"><li><a class="level is-mobile" href="#eBPF-map-操作類"><span class="level-left"><span class="level-item">1</span><span class="level-item">eBPF map 操作類</span></span></a></li><li><a class="level is-mobile" href="#通用函數"><span class="level-left"><span class="level-item">2</span><span class="level-item">通用函數</span></span></a></li><li><a class="level is-mobile" href="#Tracing-相關-kprobe-tracepoint-perf-event"><span class="level-left"><span class="level-item">3</span><span class="level-item">Tracing 相關 (kprobe, tracepoint, perf event)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Cgroup-相關"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">Cgroup 相關</span></span></a></li></ul></li><li><a class="level is-mobile" href="#其他類別"><span class="level-left"><span class="level-item">4</span><span class="level-item">其他類別</span></span></a></li><li><a class="level is-mobile" href="#XDP-相關"><span class="level-left"><span class="level-item">5</span><span class="level-item">XDP 相關</span></span></a></li><li><a class="level is-mobile" href="#LWT-相關"><span class="level-left"><span class="level-item">6</span><span class="level-item">LWT 相關</span></span></a></li><li><a class="level is-mobile" href="#socket-socket-buffer-相關"><span class="level-left"><span class="level-item">7</span><span class="level-item">socket, socket buffer 相關</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/mylogo.svg" alt="Louis Li&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2022 Louis Li</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>個訪客</span></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-TW");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到頁首" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此網站使用Cookie來改善您的體驗。",
+          dismiss: "知道了！",
+          allow: "允許使用Cookie",
+          deny: "拒絕",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="請輸入關鍵字..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"請輸入關鍵字...","untitled":"(無標題)","posts":"文章","pages":"頁面","categories":"分類","tags":"標籤"});
+        });</script></body></html>
