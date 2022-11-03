@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-2-Deployment-with-Openstack-Ansible/</loc>
+    
+    <lastmod>2022-11-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-1-Network-Architecure-and-Config/</loc>
     
     <lastmod>2022-11-03</lastmod>
@@ -21,15 +30,6 @@
   
   <url>
     <loc>https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-3-Basic-Management-Commands/</loc>
-    
-    <lastmod>2022-11-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-2-Deployment-with-Openstack-Ansible/</loc>
     
     <lastmod>2022-11-03</lastmod>
     
