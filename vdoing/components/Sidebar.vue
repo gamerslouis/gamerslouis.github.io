@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <!-- 移动端Nav -->
+    <!-- 移動端Nav -->
     <NavLinks />
 
     <slot name="top" />

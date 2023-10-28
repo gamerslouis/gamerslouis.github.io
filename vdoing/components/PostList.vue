@@ -33,13 +33,13 @@
             >
 
             <span
-              title="创建时间"
+              title="創建時間"
               class="iconfont icon-riqi"
               v-if="item.frontmatter.date"
               >{{ item.frontmatter.date.split(' ')[0] }}</span
             >
             <span
-              title="分类"
+              title="分類"
               class="iconfont icon-wenjian"
               v-if="
                 $themeConfig.category !== false && item.frontmatter.categories
@@ -53,7 +53,7 @@
               >
             </span>
             <span
-              title="标签"
+              title="標簽"
               class="iconfont icon-biaoqian tags"
               v-if="
                 $themeConfig.tag !== false &&
@@ -75,7 +75,7 @@
           <router-link
             :to="item.path"
             class="readmore iconfont icon-jiantou-you"
-            >阅读全文</router-link
+            >閱讀全文</router-link
           >
         </div>
       </div>
@@ -117,7 +117,7 @@ export default {
   },
   watch: {
     currentPage() {
-      if (this.$route.query.p != this.currentPage) { // 此判断防止添加相同的路由信息（如浏览器回退时触发的）
+      if (this.$route.query.p != this.currentPage) { // 此判斷防止添加相同的路由信息（如瀏覽器回退時觸發的）
         this.$router.push({
           query: {
             ...this.$route.query,

@@ -81,7 +81,7 @@ ${extendFrontmatterStr}---`;
       }
 
       if (!matterData.hasOwnProperty('permalink')) { // 永久链接
-        matterData.permalink = getPermalink();
+        matterData.permalink = getPermalink(file);
         hasChange = true;
       }
 
@@ -164,8 +164,12 @@ function getBirthtime(stat) {
 }
 
 // 定义永久链接数据
-function getPermalink() {
-  return `${PREFIX + (Math.random() + Math.random()).toString(16).slice(2, 8)}/`
+function getPermalink(file) {
+  if (file.filePath.includes('_posts')) {
+    return `posts/${file.name}/`
+  } else {
+    throw Error(`請設置永久連結: ${file}`)
+  }
 }
 
 

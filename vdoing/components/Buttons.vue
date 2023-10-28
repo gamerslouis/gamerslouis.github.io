@@ -2,20 +2,20 @@
   <div class="buttons">
     <transition name="fade">
       <div
-        title="返回顶部"
+        title="返回頂部"
         class="button blur go-to-top iconfont icon-fanhuidingbu"
         v-show="showToTop"
         @click="scrollToTop"
       />
     </transition>
     <div
-      title="去评论"
+      title="去評論"
       class="button blur go-to-comment iconfont icon-pinglun"
       v-show="showCommentBut"
       @click="scrollToComment"
     />
     <div
-      title="主题模式"
+      title="主題模式"
       class="button blur theme-mode-but iconfont icon-zhuti"
       @mouseenter="showModeBox = true"
       @mouseleave="showModeBox = false"
@@ -46,7 +46,7 @@
 
 <script>
 import debounce from 'lodash.debounce'
-import storage from 'good-storage' // 本地存储
+import storage from 'good-storage' // 在地存儲
 const MOBILE_DESKTOP_BREAKPOINT = 719 // refer to config.styl
 
 export default {
@@ -60,12 +60,12 @@ export default {
       showModeBox: false,
       modeList: [
         {
-          name: '跟随系统',
+          name: '跟隨係統',
           icon: 'icon-zidong',
           KEY: 'auto'
         },
         {
-          name: '浅色模式',
+          name: '淺色模式',
           icon: 'icon-rijianmoshi',
           KEY: 'light'
         },
@@ -74,18 +74,18 @@ export default {
           icon: 'icon-yejianmoshi',
           KEY: 'dark'
         },
-        {
-          name: '阅读模式',
-          icon: 'icon-yuedu',
-          KEY: 'read'
-        }
+        // {
+        //   name: '閱讀模式',
+        //   icon: 'icon-yuedu',
+        //   KEY: 'read'
+        // }
       ],
       _scrollTimer: null,
       _textareaEl: null,
       _recordScrollTop: null,
-      COMMENT_SELECTOR_1: '#vuepress-plugin-comment', // 评论区元素的选择器1
-      COMMENT_SELECTOR_2: '#valine-vuepress-comment', // 评论区元素的选择器2
-      COMMENT_SELECTOR_3: '.vssue' // 评论区元素的选择器3
+      COMMENT_SELECTOR_1: '#vuepress-plugin-comment', // 評論區元素的選擇器1
+      COMMENT_SELECTOR_2: '#valine-vuepress-comment', // 評論區元素的選擇器2
+      COMMENT_SELECTOR_3: '.vssue' // 評論區元素的選擇器3
     }
   },
   mounted () {
@@ -99,7 +99,7 @@ export default {
       this.getCommentTop()
     })
 
-    // 小屏时选择主题模式后关闭选择框
+    // 小屏時選擇主題模式後關閉選擇框
     if (document.documentElement.clientWidth < MOBILE_DESKTOP_BREAKPOINT) {
       const modeBox = this.$refs.modeBox
       modeBox.onclick = () => {
@@ -113,7 +113,7 @@ export default {
     }
 
 
-    // 移动端对类似:hover效果的处理
+    // 移動端對類似:hover效果的處理
     const buttons = document.querySelectorAll('.buttons .button')
     for (let i = 0; i < buttons.length; i++) {
       const button = buttons[i]

@@ -1,7 +1,7 @@
 <template>
   <div class="right-menu-wrapper">
     <div class="right-menu-margin">
-      <div class="right-menu-title">目录</div>
+      <div class="right-menu-title">目錄</div>
       <div class="right-menu-content">
         <div
           :class="[

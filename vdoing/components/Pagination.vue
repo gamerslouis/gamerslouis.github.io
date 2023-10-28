@@ -5,10 +5,10 @@
       :class="{ disabled: currentPage === 1 }"
       @click="goPrex()"
     >
-      <p>上一页</p>
+      <p>上一頁</p>
     </span>
 
-    <!-- 分页在5页及以下时 -->
+    <!-- 分頁在5頁及以下時 -->
     <div class="pagination-list" v-if="pages <= 5">
       <span
         class="card-box"
@@ -19,9 +19,9 @@
         >{{ item }}</span
       >
     </div>
-    <!-- 分页在5页以上 -->
+    <!-- 分頁在5頁以上 -->
     <div class="pagination-list" v-else>
-      <!-- 一号位 -->
+      <!-- 一號位 -->
       <span
         class="card-box"
         :class="{ active: currentPage === 1 }"
@@ -29,14 +29,14 @@
         >1</span
       >
 
-      <!-- 二号位 -->
+      <!-- 二號位 -->
       <span
         class="ellipsis ell-two"
         v-show="currentPage > 3"
         @click="goIndex(currentPage - 2)"
-        title="上两页"
+        title="上兩頁"
       />
-      <!--这里没有使用v-if的原因是因为部署版本在当前页大于3时刷新页面出现了一些bug-->
+      <!--這裏冇有使用v-if的原因是因為部署版本在當前頁大於3時刷新頁麵出現了一些bug-->
       <span
         class="card-box"
         v-show="currentPage <= 3"
@@ -45,7 +45,7 @@
         >2</span
       >
 
-      <!-- 三号位 -->
+      <!-- 三號位 -->
       <span
         class="card-box"
         :class="{ active: currentPage >= 3 && currentPage <= pages - 2 }"
@@ -53,12 +53,12 @@
         >{{ threeNum() }}</span
       >
 
-      <!-- 四号位 -->
+      <!-- 四號位 -->
       <span
         class="ellipsis ell-four"
         v-show="currentPage < pages - 2"
         @click="goIndex(currentPage + 2)"
-        title="下两页"
+        title="下兩頁"
       />
       <span
         class="card-box"
@@ -68,7 +68,7 @@
         >{{ pages - 1 }}</span
       >
 
-      <!-- 五号位 -->
+      <!-- 五號位 -->
       <span
         class="card-box"
         :class="{ active: currentPage === pages }"
@@ -82,7 +82,7 @@
       :class="{ disabled: currentPage === pages }"
       @click="goNext()"
     >
-      <p>下一页</p>
+      <p>下一頁</p>
     </span>
   </div>
 </template>
@@ -90,26 +90,26 @@
 <script>
 export default {
   props: {
-    total: { // 总长度
+    total: { // 總長度
       type: Number,
       default: 10
     },
-    perPage: { // 每页长
+    perPage: { // 每頁長
       type: Number,
       default: 10
     },
-    currentPage: { // 当前页
+    currentPage: { // 當前頁
       type: Number,
       default: 1
     }
   },
   computed: {
-    pages() { // 总页数
+    pages() { // 總頁數
       return Math.ceil(this.total / this.perPage)
     }
   },
   methods: {
-    threeNum() { // 三号位页码计算
+    threeNum() { // 三號位頁碼計算
       let num = 3
       const currentPage = this.currentPage
       const pages = this.pages
@@ -218,7 +218,7 @@ export default {
 // 719px
 @media (max-width $MQMobile)
   .pagination
-    > span // 左右按钮
+    > span // 左右按鈕
       padding 0.9rem 1.5rem
     .pagination-list
       span
@@ -228,7 +228,7 @@ export default {
         margin 0.25rem
 @media (max-width 390px)
   .pagination
-    > span // 左右按钮
+    > span // 左右按鈕
       padding 0.8rem 1.3rem
     .pagination-list
       span

@@ -98,11 +98,11 @@ export default {
     getShowStatus(prop) {
       const { htmlModules } = this.$themeConfig
       if (!htmlModules) return false
-      if (htmlModules[prop] === 'article') { // 仅文章页显示
+      if (htmlModules[prop] === 'article') { // 僅文章頁顯示
         return this.isArticle()
-      } else if (htmlModules[prop] === 'custom') { // 仅自定义页显示
+      } else if (htmlModules[prop] === 'custom') { // 僅自定義頁顯示
         return !(this.isArticle())
-      } else { // 全部显示
+      } else { // 全部顯示
         return true
       }
     },
@@ -161,27 +161,27 @@ export default {
     background-image linear-gradient(90deg, var(--linesColor) 3%, transparent 3%), linear-gradient(0deg, var(--linesColor) 3%, transparent 3%)
     background-position center center
     background-size 20px 20px
-  &.bg-style-2 // 横线
+  &.bg-style-2 // 橫線
     background-image repeating-linear-gradient(0, var(--linesColor) 0, var(--linesColor) 1px, transparent 0, transparent 50%)
     background-size 30px 30px
-  &.bg-style-3 // 竖线
+  &.bg-style-3 // 豎線
     background-image repeating-linear-gradient(90deg, var(--linesColor) 0, var(--linesColor) 1px, transparent 0, transparent 50%)
     background-size 30px 30px
-  &.bg-style-4 // 左斜线
+  &.bg-style-4 // 左斜線
     background-image repeating-linear-gradient(-45deg, var(--linesColor) 0, var(--linesColor) 1px, transparent 0, transparent 50%)
     background-size 20px 20px
-  &.bg-style-5 // 右斜线
+  &.bg-style-5 // 右斜線
     background-image repeating-linear-gradient(45deg, var(--linesColor) 0, var(--linesColor) 1px, transparent 0, transparent 50%)
     background-size 20px 20px
-  &.bg-style-6 // 点状
+  &.bg-style-6 // 點狀
     background-image radial-gradient(var(--linesColor) 1px, transparent 1px)
     background-size 10px 10px
-// 背景纹适应深色模式
+// 背景紋適應深色模式
 .theme-mode-dark
   .theme-vdoing-wrapper
     --linesColor rgba(125, 125, 125, 0.05)
 /**
- * 右侧菜单的自适应
+ * 右側菜單的自適應
  */
 @media (min-width 720px) and (max-width 1279px)
   .have-rightmenu
@@ -195,7 +195,7 @@ export default {
   .have-rightmenu
     .sidebar .sidebar-sub-headers
       display none
-// 左侧边栏只有一项且没有右侧边栏时
+// 左側邊欄隻有一項且冇有右側邊欄時
 .theme-container.only-sidebarItem:not(.have-rightmenu)
   .sidebar, .sidebar-button
     display none
@@ -207,7 +207,7 @@ export default {
       padding-left 0rem !important
     .sidebar, .sidebar-button
       display block
-// 左侧边栏只有一项且有右侧边栏时
+// 左側邊欄隻有一項且有右側邊欄時
 .theme-container.only-sidebarItem.have-rightmenu
   @media (min-width 720px) and (max-width 1279px)
     .sidebar, .sidebar-button

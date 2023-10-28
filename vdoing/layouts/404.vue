@@ -1,19 +1,17 @@
 <template>
   <div class="theme-container">
     <div class="theme-vdoing-content">
-      <span>404</span>
+      <img src="/img/404.png" alt="404" />
       <blockquote>{{ getMsg() }}</blockquote>
-      <router-link to="/">返回首页</router-link>
+      <router-link to="/">返回首頁</router-link>
     </div>
   </div>
 </template>
 
 <script>
 const msgs = [
-  `这里什么都没有。`,
-  `我是谁？我在哪？`,
-  `这是一个Four-Oh-Four.`,
-  `看来我们的链接坏掉了~`
+  `我是誰？我在哪？`,
+  `看來我們的鏈接壞掉了...`
 ]
 
 export default {
@@ -29,7 +27,7 @@ export default {
 .theme-vdoing-content
   margin 3rem auto
   padding 1.5rem
-  span
+  img
     font-size 6rem
     color $accentColor
 </style>

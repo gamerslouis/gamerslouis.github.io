@@ -41,9 +41,9 @@ export default {
   data() {
     return {
       category: '',
-      total: 0, // 总长
-      perPage: 10, // 每页长
-      currentPage: 1// 当前页
+      total: 0, // 總長
+      perPage: 10, // 每頁長
+      currentPage: 1// 當前頁
     }
   },
   components: { MainLayout, PostList, Pagination, CategoriesBar },
@@ -59,7 +59,7 @@ export default {
       this.currentPage = Number(this.$route.query.p)
     }
 
-    // 滚动条定位到当前分类（增强用户体验）
+    // 滾動條定位到當前分類（增強用戶體驗）
     const cateEl = document.querySelector('.categories')
     if (cateEl) {
       setTimeout(() => {
@@ -70,7 +70,7 @@ export default {
     }
   },
   methods: {
-    handlePagination(i) { // 分页
+    handlePagination(i) { // 分頁
       this.currentPage = i
     }
   },

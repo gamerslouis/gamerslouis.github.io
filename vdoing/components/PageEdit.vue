@@ -12,7 +12,7 @@
         :to="`/tags/?tag=${encodeURIComponent(item)}`"
         v-for="(item, index) in tags"
         :key="index"
-        title="标签"
+        title="標簽"
         >#{{ item }}</router-link
       >
     </div>

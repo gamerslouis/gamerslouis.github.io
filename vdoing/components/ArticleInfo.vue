@@ -1,25 +1,25 @@
 <template>
   <div class="articleInfo-wrap">
     <div class="articleInfo">
-      <!-- 面包屑 -->
+      <!-- 麵包屑 -->
       <ul class="breadcrumbs" v-if="classify1 && classify1 !== '_posts'">
         <li>
-          <router-link to="/" class="iconfont icon-home" title="首页" />
+          <router-link to="/" class="iconfont icon-home" title="首頁" />
         </li>
 
         <li v-for="item in classifyList" :key="item">
-          <!-- 跳目录页 -->
+          <!-- 跳目錄頁 -->
           <router-link v-if="cataloguePermalink" :to="getLink(item)">{{
             item
           }}</router-link>
-          <!-- 跳分类页 -->
+          <!-- 跳分類頁 -->
           <router-link
             v-else-if="$themeConfig.category !== false"
             :to="`/categories/?category=${encodeURIComponent(item)}`"
-            title="分类"
+            title="分類"
             >{{ item }}</router-link
           >
-          <!-- 没有跳转 -->
+          <!-- 冇有跳轉 -->
           <span v-else>{{ item }}</span>
         </li>
       </ul>
@@ -39,12 +39,12 @@
           >
           <a v-else href="javascript:;">{{ author.name || author }}</a>
         </div>
-        <div class="date iconfont icon-riqi" title="创建时间" v-if="date">
+        <div class="date iconfont icon-riqi" title="創建時間" v-if="date">
           <a href="javascript:;">{{ date }}</a>
         </div>
         <div
           class="date iconfont icon-wenjian"
-          title="分类"
+          title="分類"
           v-if="
             $themeConfig.category !== false &&
             !(classify1 && classify1 !== '_posts') &&
@@ -90,7 +90,7 @@ export default {
       const { relativePath } = pageInfo
       const { sidebar } = this.$themeConfig
 
-      // 分类采用解析文件夹地址名称的方式 (即使关闭分类功能也可以正确跳转目录页)
+      // 分類採用解析檔案夾地址名稱的方式 (即使關閉分類功能也可以正確跳轉目錄頁)
       const relativePathArr = relativePath.split('/')
 
       // const classifyArr = relativePathArr[0].split('.')
@@ -110,11 +110,11 @@ export default {
 
       this.classify1 = this.classifyList[0]
 
-      const cataloguePermalink = sidebar && sidebar.catalogue ? sidebar.catalogue[this.classify1] : ''// 目录页永久链接
+      const cataloguePermalink = sidebar && sidebar.catalogue ? sidebar.catalogue[this.classify1] : ''// 目錄頁永久鏈接
       const author = this.$frontmatter.author || this.$themeConfig.author // 作者
-      let date = (pageInfo.frontmatter.date || '').split(' ')[0] // 文章创建时间
+      let date = (pageInfo.frontmatter.date || '').split(' ')[0] // 文章創建時間
 
-      // 获取页面frontmatter的分类（碎片化文章使用）
+      // 獲取頁麵frontmatter的分類（碎片化文章使用）
       const { categories } = this.$frontmatter
 
       this.date = date

@@ -8,7 +8,7 @@
       </dl>
     </div>
     <div class="catalogue-wrapper" v-if="isStructuring">
-      <div class="catalogue-title">目录</div>
+      <div class="catalogue-title">目錄</div>
       <div class="catalogue-content">
         <template v-for="(item, index) in getCatalogueList()">
           <dl v-if="type(item) === 'array'" :key="index" class="inline">
@@ -22,13 +22,13 @@
             </dt>
           </dl>
           <dl v-else-if="type(item) === 'object'" :key="index">
-            <!-- 一级目录 -->
+            <!-- 一級目錄 -->
             <dt :id="(anchorText = item.title)">
               <a :href="`#${anchorText}`" class="header-anchor">#</a>
               {{ `${index + 1}. ${item.title}` }}
             </dt>
             <dd>
-              <!-- 二级目录 -->
+              <!-- 二級目錄 -->
               <template v-for="(c, i) in item.children">
                 <template v-if="type(c) === 'array'">
                   <router-link :to="c[2]" :key="i"
@@ -38,7 +38,7 @@
                     </span>
                   </router-link>
                 </template>
-                <!-- 三级目录 -->
+                <!-- 三級目錄 -->
                 <div
                   v-else-if="type(c) === 'object'"
                   :key="i"
@@ -82,7 +82,7 @@ export default {
     const sidebar = this.$themeConfig.sidebar
     if (!sidebar || sidebar === 'auto') {
       this.isStructuring = false
-      console.error("目录页数据依赖于结构化的侧边栏数据，请在主题设置中将侧边栏字段设置为'structuring'，否则无法获取目录数据。")
+      console.error("目錄頁數據依賴於結構化的側邊欄數據，請在主題設定中將側邊欄字段設定為'structuring'，否則無法獲取目錄數據。")
     }
   },
   methods: {
@@ -94,7 +94,7 @@ export default {
           title: this.$frontmatter.title
         }
       } else {
-        console.error('请在front matter中设置pageComponent和pageComponent.data数据')
+        console.error('請在front matter中設定pageComponent和pageComponent.data數據')
       }
     },
     getCatalogueList() {
@@ -104,23 +104,23 @@ export default {
       let keyArray = key.split('/');
       let catalogueList = (sidebar[`/${keyArray[0]}/`]);
       if (keyArray.length > 1) {
-        // 删除第一个元素，并修改原数组
+        // 刪除第一個元素，並修改原數組
         keyArray.shift();
         catalogueList = this.appointDirDeal(0, keyArray, catalogueList);
       }
       if (!catalogueList) {
-        console.error('未获取到目录数据，请查看front matter中设置的path是否正确。')
+        console.error('未獲取到目錄數據，請檢視front matter中設定的path是否正確。')
       }
       return catalogueList
     },
-    type(o) { // 数据类型检查
+    type(o) { // 數據類型檢查
       return Object.prototype.toString.call(o).match(/\[object (.*?)\]/)[1].toLowerCase()
     },
     /**
-     * 指定目录页配置处理
-     * @param index 目录数组的下标
-     * @param dirKeyArray 目录名称数组
-     * @param catalogueList 目录对象列表
+     * 指定目錄頁配置處理
+     * @param index 目錄數組的下標
+     * @param dirKeyArray 目錄名稱數組
+     * @param catalogueList 目錄對象列錶
      * @returns {*}
      */
     appointDirDeal(index, dirKeyArray, catalogueList) {

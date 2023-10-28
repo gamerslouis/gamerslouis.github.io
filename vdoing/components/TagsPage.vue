@@ -37,9 +37,9 @@ export default {
   data() {
     return {
       tag: '',
-      total: 0, // 总长
-      perPage: 10, // 每页长
-      currentPage: 1// 当前页
+      total: 0, // 總長
+      perPage: 10, // 每頁長
+      currentPage: 1// 當前頁
     }
   },
   components: { MainLayout, PostList, Pagination, TagsBar },
@@ -57,7 +57,7 @@ export default {
     }
   },
   methods: {
-    handlePagination(i) { // 分页
+    handlePagination(i) { // 分頁
       this.currentPage = i
     }
   },

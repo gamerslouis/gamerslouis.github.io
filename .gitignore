@@ -8,6 +8,7 @@ yarn-error.log
 
 # pnpm
 pnpm-lock.yaml
+.pnpm-store
 
 # vscode
 .vscode

@@ -1,6 +1,6 @@
 <template>
   <div class="home-wrapper">
-    <!-- banner块 s -->
+    <!-- banner塊 s -->
     <div
       class="banner"
       :class="{ 'hide-banner': !showBanner }"
@@ -29,7 +29,7 @@
           </p>
         </header>
 
-        <!-- PC端features块 s -->
+        <!-- PC端features塊 s -->
         <div class="features" v-if="hasFeatures && !isMQMobile">
           <div
             class="feature"
@@ -58,11 +58,11 @@
             </a>
           </div>
         </div>
-        <!-- PC端features块 e -->
+        <!-- PC端features塊 e -->
       </div>
 
-      <!-- 移动端features块 s -->
-      <!-- isMQMobile放到v-if上线后会报错 -->
+      <!-- 移動端features塊 s -->
+      <!-- isMQMobile放到v-if上線後會報錯 -->
       <div class="slide-banner" v-if="hasFeatures" v-show="isMQMobile">
         <div class="banner-wrapper">
           <div class="slide-banner-scroll" ref="slide">
@@ -105,13 +105,13 @@
           </div>
         </div>
       </div>
-      <!-- 移动端features块 e -->
+      <!-- 移動端features塊 e -->
     </div>
-    <!-- banner块 e -->
+    <!-- banner塊 e -->
 
     <MainLayout>
       <template #mainLeft>
-        <!-- 简约版文章列表 -->
+        <!-- 簡約版文章列錶 -->
         <UpdateArticle
           class="card-box"
           v-if="homeData.postList === 'simple'"
@@ -121,7 +121,7 @@
           "
         />
 
-        <!-- 详情版文章列表 -->
+        <!-- 詳情版文章列錶 -->
         <template
           v-else-if="!homeData.postList || homeData.postList === 'detailed'"
         >
@@ -189,9 +189,9 @@ export default {
       playTimer: 0,
       mark: 0,
 
-      total: 0, // 总长
-      perPage: 10, // 每页长
-      currentPage: 1// 当前页
+      total: 0, // 總長
+      perPage: 10, // 每頁長
+      currentPage: 1// 當前頁
     }
   },
   computed: {
@@ -207,7 +207,7 @@ export default {
       const { htmlModules } = this.$themeConfig
       return htmlModules ? htmlModules.homeSidebarB : ''
     },
-    showBanner() { // 当分页不在第一页时隐藏banner栏
+    showBanner() { // 當分頁不在第一頁時隱藏banner欄
       return this.$route.query.p
         && this.$route.query.p != 1
         && (!this.homeData.postList || this.homeData.postList === 'detailed')
@@ -215,21 +215,21 @@ export default {
     },
     bannerBgStyle() {
       let bannerBg = this.homeData.bannerBg
-      if (!bannerBg || bannerBg === 'auto') { // 默认
-        if (this.$themeConfig.bodyBgImg) { // 当有bodyBgImg时，不显示背景
+      if (!bannerBg || bannerBg === 'auto') { // 預設
+        if (this.$themeConfig.bodyBgImg) { // 當有bodyBgImg時，不顯示背景
           return ''
-        } else { // 网格纹背景
+        } else { // 網格紋背景
           return 'background: rgb(40,40,45) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABOSURBVFhH7c6xCQAgDAVRR9A6E4hLu4uLiWJ7tSnuQcIvr2TRYsw3/zOGGEOMIcYQY4gxxBhiDDGGGEOMIcYQY4gxxBhiDLkx52W4Gn1tuslCtHJvL54AAAAASUVORK5CYII=)'
         }
-      } else if (bannerBg === 'none') { // 无背景
+      } else if (bannerBg === 'none') { // 無背景
         if (this.$themeConfig.bodyBgImg) {
           return ''
         } else {
           return 'background: var(--mainBg);color: var(--textColor)'
         }
-      } else if (bannerBg.indexOf('background:') > -1) { // 自定义背景样式
+      } else if (bannerBg.indexOf('background:') > -1) { // 自定義背景樣式
         return bannerBg
-      } else if (bannerBg.indexOf('.') > -1) { // 大图
+      } else if (bannerBg.indexOf('.') > -1) { // 大圖
         return `background: url(${this.$withBase(bannerBg)}) center center / cover no-repeat`
       }
 
@@ -246,7 +246,7 @@ export default {
     this.total = this.$sortPosts.length
   },
   beforeMount() {
-    this.isMQMobile = window.innerWidth < MOBILE_DESKTOP_BREAKPOINT ? true : false; // vupress在打包时不能在beforeCreate(),created()访问浏览器api（如window）
+    this.isMQMobile = window.innerWidth < MOBILE_DESKTOP_BREAKPOINT ? true : false; // vupress在打包時不能在beforeCreate(),created()訪問瀏覽器api（如window）
   },
   mounted() {
     if (this.$route.query.p) {
@@ -293,15 +293,15 @@ export default {
     init() {
       clearTimeout(this.playTimer)
       this.slide = new BScroll(this.$refs.slide, {
-        scrollX: true, // x轴滚动
-        scrollY: false, // y轴滚动
+        scrollX: true, // x軸滾動
+        scrollY: false, // y軸滾動
         slide: {
           loop: true,
           threshold: 100
         },
-        useTransition: true, // 使用css3 transition动画
+        useTransition: true, // 使用css3 transition動畫
         momentum: false,
-        bounce: false, // 回弹
+        bounce: false, // 回彈
         stopPropagation: false, // 是否阻止事件冒泡
         probeType: 2,
         preventDefault: false
@@ -326,7 +326,7 @@ export default {
         this.slide.next()
       }, 4000)
     },
-    handlePagination(i) { // 分页
+    handlePagination(i) { // 分頁
       this.currentPage = i
     },
     getScrollTop() {
@@ -419,7 +419,7 @@ export default {
           animation-play-state running
         h2, p
           color $accentColor
-    // 移动端滑动图标
+    // 移動端滑動圖示
     .slide-banner
       margin-top 2rem
       .banner-wrapper
@@ -463,7 +463,7 @@ export default {
           opacity 0.9
           &.active
             opacity 0.5
-  // 分页不在第一页时，隐藏banner栏
+  // 分頁不在第一頁時，隱藏banner欄
   .banner.hide-banner
     display none
     & + .main-wrapper

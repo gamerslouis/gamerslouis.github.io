@@ -14,20 +14,22 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@vuepress/types": "^1.9.10",
     "dayjs": "^1.9.7",
+    "html-to-text": "^9.0.5",
     "inquirer": "^7.1.0",
     "json2yaml": "^1.1.0",
+    "vue-template-compiler": "^2.7.15",
     "vuepress": "1.9.9",
-    "vuepress-plugin-baidu-autopush": "^1.0.1",
-    "vuepress-plugin-baidu-tongji": "^1.0.1",
     "vuepress-plugin-comment": "^0.7.3",
     "vuepress-plugin-demo-block": "^0.7.2",
     "vuepress-plugin-fulltext-search": "^2.2.1",
     "vuepress-plugin-one-click-copy": "^1.0.2",
+    "vuepress-plugin-pangu": "^1.0.1",
     "vuepress-plugin-sitemap": "^2.3.1",
     "vuepress-plugin-thirdparty-search": "^1.0.2",
     "vuepress-plugin-zooming": "^1.1.7",
-    "vuepress-theme-vdoing": "^1.12.9",
+    "vuepress-theme-vdoing": "file:vdoing",
     "yamljs": "^0.3.0"
   }
 }

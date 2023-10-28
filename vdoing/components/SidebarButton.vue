@@ -2,7 +2,7 @@
   <div
     class="sidebar-button"
     @click="$emit('toggle-sidebar')"
-    title="目录"
+    title="目錄"
   >
     <svg
       class="icon"

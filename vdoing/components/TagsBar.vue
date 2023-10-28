@@ -3,8 +3,8 @@
     <router-link
       to="/tags/"
       class="title iconfont icon-biaoqian1"
-      title="全部标签"
-    >{{ length === 'all' ? '全部标签' : '热门标签' }}</router-link>
+      title="全部標簽"
+    >{{ length === 'all' ? '全部標簽' : '熱門標簽' }}</router-link>
     <div class="tags">
       <template v-for="(item, index) in tags">
         <router-link
@@ -41,7 +41,7 @@ export default {
   },
   data () {
     return {
-      tagBgColor: ['#11a8cd', '#F8B26A', '#67CC86', '#E15B64', '#F47E60', '#849B87'],
+      tagBgColor: ['#2980b9', '#d35400', '#27ae60', '#c0392b', '#f39c12', '#8e44ad'],
       tagStyleList: []
     }
   },
@@ -87,8 +87,7 @@ export default {
       display inline-block
       padding 0.2rem 0.4rem
       transition all 0.4s
-      background-color var(--textColor)
-      color var(--mainBg)
+      color $tagColor
       border-radius 3px
       margin 0 0.3rem 0.5rem 0
       min-width 2rem

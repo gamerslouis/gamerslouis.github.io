@@ -31,7 +31,7 @@ export default {
         }
         this.bgImg = bodyBgImg[count]
 
-        // 预加载下一张图片
+        // 預加載下一張圖片
         if (bodyBgImg[count + 1]) {
           const img = new Image()
           img.src = bodyBgImg[count + 1]
