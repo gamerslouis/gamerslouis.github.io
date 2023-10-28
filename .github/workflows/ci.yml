@@ -26,6 +26,7 @@ jobs:
           node-version: ${{ matrix.node-version }} # 版本
       - name: Build-and-deploy # 步骤3
         run: |
+          npm install -g pnpm
           pnpm install
           pnpm build
       - name: Deploy 🚀
