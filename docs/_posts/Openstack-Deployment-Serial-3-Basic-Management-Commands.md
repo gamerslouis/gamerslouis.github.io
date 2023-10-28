@@ -8,7 +8,7 @@ date: 2022-11-03
 title: OpenStack 架設系列文章 (3) - 基本指令操作
 ---
 
-在前面的文章中，我們介紹了 Openstack 的幾種  [網路架構](https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-1-Network-Architecure-and-Config/)，並使用 Openstack-Ansible (OSA) 完成了 Openstack 的  [部屬](https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-2-Deployment-with-Openstack-Ansible/)，今天則會簡單紀錄一下在完成 OSA 部屬之後怎麼操作 openstack。
+在前面的文章中，我們介紹了 Openstack 的幾種[網路架構](https://blog.louisif.me/posts/Openstack-Deployment-Serial-1-Network-Architecure-and-Config/)，並使用 Openstack-Ansible (OSA) 完成了 Openstack 的[部屬](https://blog.louisif.me/posts/Openstack-Deployment-Serial-2-Deployment-with-Openstack-Ansible/)，今天則會簡單紀錄一下在完成 OSA 部屬之後怎麼操作 openstack。
 
 <!-- more -->
 

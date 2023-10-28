@@ -270,7 +270,7 @@ int pass(struct __sk_buff *skb) {
 
 ## Direct action
 
-然而由於 tc 的 hook point 分成 classifier 和 action 因此無法透過單一個 eBPF 程式做到 match-action 的效果，然而大多數時候 eBPF tc 程式的開發並不是要利用 tc 系統的功能做限速等功能，而是要利用 tc 在 kernel path 極早期這點做 packet mangling 和 filter 等事項，再加上 tc 系統的使用學習難度相對高，因此 eBPC 在 tc 後引入了  [direct-action](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=045efa82ff563cd4e656ca1c2e354fa5bf6bbda4)  和  [clsact](<https://blog.louisif.me/eBPF/Learn-eBPF-Serial-7-tc-BCC-neighbor-sharing/%5B%601f211a1b929c%60%5D(https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=1f211a1b929c804100e138c5d3d656992cfd5622)>)  這兩個功能。
+然而由於 tc 的 hook point 分成 classifier 和 action 因此無法透過單一個 eBPF 程式做到 match-action 的效果，然而大多數時候 eBPF tc 程式的開發並不是要利用 tc 系統的功能做限速等功能，而是要利用 tc 在 kernel path 極早期這點做 packet mangling 和 filter 等事項，再加上 tc 系統的使用學習難度相對高，因此 eBPC 在 tc 後引入了  [direct-action](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=045efa82ff563cd4e656ca1c2e354fa5bf6bbda4)  和  [clsact](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=1f211a1b929c804100e138c5d3d656992cfd5622)  這兩個功能。
 
 首先介紹 direct-action (da)，這個是在 classifier (BPF_PROG_TYPE_SCHED_CLS) 可啟用的一個選項，如果啟用 da，classifier 的回傳值就變成是 action，和 BPF_PROG_TYPE_SCHED_ACT 相同，而原本的 classid 改成設置\_\_skb_buff->tc_classid 來傳輸。
 

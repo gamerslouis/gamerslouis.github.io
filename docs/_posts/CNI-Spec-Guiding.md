@@ -58,14 +58,14 @@ plugin configuration object 包含了一些明定的欄位，但 CNI plugin 可�
 - 必填:
   - `type` (string): CNI plugin 的執行檔名稱
 - 可選欄位 (CNI protocol 使用):
-  - `capabilities` (dictionary): 定義 CNI plugin 支援的 capabilities，後面在 [section 3](https://blog.louisif.me/Kubernetes/CNI-Spec-Guiding/#Deriving-execution-configuration-from-plugin-configuration) 會介紹。
+  - `capabilities` (dictionary): 定義 CNI plugin 支援的 capabilities，後面在 section 3 會介紹。
 - 保留欄位：這些欄位是在執行過程中，由 runtime 生成出來的，因此不應該在設定檔內被定義。
   - `runtimeConfig`
   - `args`
   - 任何 `cni.dev/` 開頭的 key
 - 可選欄位：不是 protocol 定義的欄位，但是由於很多 CNI plugin 都有使用，因此具有特定的意義。
   - ipMasq (boolean): 如果 plugin 支援的話，會在 host 上替該網路設置 IP masquerade，如果 host 要做為該網路的 gateway 的話，可能需要該功能。
-  - ipam (dictionary): IPAM (IP Address Management) 設置，後面在 [section 4](https://blog.louisif.me/Kubernetes/CNI-Spec-Guiding/#Section-4-Plugin-Delegation) 會介紹。
+  - ipam (dictionary): IPAM (IP Address Management) 設置，後面在 section 4 會介紹。
   - dns (dictionary): DNS 設置相關設置
     - nameservers (list of strings): DNS server 的 IP 列表
     - domain (string): DNS search domain
