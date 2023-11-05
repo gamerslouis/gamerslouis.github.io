@@ -271,7 +271,7 @@ function getCardImgListDOM(dataList, row, config) {
           </div>
 
           ${item.avatar || item.author ? `<div class="box-footer">
-              ${item.avatar ? `<img src="${withBase(item.avatar)}" class="no-zoom">` : ''}
+              ${item.avatar ? `<img src="${withBase(item.avatar)}" class="no-zoom" loading="lazy">` : ''}
               ${item.author ? `<span>${item.author}</span>` : ''}
           </div>`: ''}
         </a>

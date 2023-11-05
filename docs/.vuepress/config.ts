@@ -238,14 +238,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
     ],
     ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移動瀏覽器主題顔色
-    // [
-    //   'script',
-    //   {
-    //     'data-ad-client': 'ca-pub-7828333725993554',
-    //     async: 'async',
-    //     src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-    //   },
-    // ], // 網站關聯Google AdSense 與 html格式廣告支援（你可以去掉）
+    ['meta', { name: 'charset', content: 'utf-8' }],
+    ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+
   ],
 
   // 插件配置
@@ -254,6 +249,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       'sitemap', // 網站地圖
       {
         hostname: WEB_SITE,
+        example: ['/404.html']
       },
     ],
 

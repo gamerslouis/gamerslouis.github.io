@@ -6,7 +6,7 @@ export default ({ router }) => {
     const s = document.createElement('script')
     s.async = 1
     s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`
-    const s0 = document.getElementsByTagName('script')
+    const s0 = document.getElementsByTagName('script')[0]
     s0.parentNode.insertBefore(s, s0)
 
     gtag('js', new Date());
