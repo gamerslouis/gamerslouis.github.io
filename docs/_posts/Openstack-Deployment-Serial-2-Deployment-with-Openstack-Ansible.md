@@ -8,7 +8,7 @@ date: 2022-11-01
 title: OpenStack 架設系列文章 (2) - 使用 OpenStack Ansible 部署 OpenStack
 ---
 
-在前一篇文章中，我們介紹了 Openstack 的幾種  [網路架構](https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-1-Network-Architecure-and-Config/)，今天我們要介紹如何使用 Openstack 官方提供的 Openstack-Ansible (OSA) 來完成 Opentack 的部署。
+在前一篇文章中，我們介紹了 Openstack 的幾種  [網路架構](https://blog.louisif.me/posts/Openstack-Deployment-Serial-1-Network-Architecure-and-Config/)，今天我們要介紹如何使用 Openstack 官方提供的 Openstack-Ansible (OSA) 來完成 Opentack 的部署。
 
 <!-- more -->
 
@@ -184,8 +184,6 @@ provider_networks:
 而在現行的架構下 neutron agent 是直接跑在 compute node 的 host 上的。
 
 ![Neutron not in LXC](/img/pages/52951f37ab30503b4604637818540294.png)
-
-[](https://blog.louisif.me/Openstack/Openstack-Deployment-Serial-2-Deployment-with-Openstack-Ansible/Pastedimage20221030152125.png)
 
 然後回顧本系列文章前一篇就會知道，不論是 vlan 還是 flat 架構下，我們都只需要指定一張 interface 作為對外出口，bridge 的部分是歸屬於 neutron agent 管理的。
 
