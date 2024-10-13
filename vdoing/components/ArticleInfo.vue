@@ -4,7 +4,7 @@
       <!-- 麵包屑 -->
       <ul class="breadcrumbs" v-if="classify1 && classify1 !== '_posts'">
         <li>
-          <router-link to="/" class="iconfont icon-home" title="首頁" />
+          <router-link to="/" class="material-icons icon-home" title="首頁" />
         </li>
 
         <li v-for="item in classifyList" :key="item">
@@ -26,7 +26,7 @@
 
       <!-- 作者&日期 -->
       <div class="info">
-        <div class="author iconfont icon-touxiang" title="作者" v-if="author">
+        <div class="author material-icons icon-person" title="作者" v-if="author">
           <a
             :href="author.href || author.link"
             v-if="
@@ -39,11 +39,11 @@
           >
           <a v-else href="javascript:;">{{ author.name || author }}</a>
         </div>
-        <div class="date iconfont icon-riqi" title="創建時間" v-if="date">
+        <div class="date material-icons icon-event" title="創建時間" v-if="date">
           <a href="javascript:;">{{ date }}</a>
         </div>
         <div
-          class="date iconfont icon-wenjian"
+          class="date material-icons icon-folder"
           title="分類"
           v-if="
             $themeConfig.category !== false &&

@@ -3,20 +3,20 @@
     <transition name="fade">
       <div
         title="返回頂部"
-        class="button blur go-to-top iconfont icon-fanhuidingbu"
+        class="button blur go-to-top material-icons icon-arrow-back"
         v-show="showToTop"
         @click="scrollToTop"
       />
     </transition>
     <div
       title="去評論"
-      class="button blur go-to-comment iconfont icon-pinglun"
+      class="button blur go-to-comment material-icons icon-comment"
       v-show="showCommentBut"
       @click="scrollToComment"
     />
     <div
       title="主題模式"
-      class="button blur theme-mode-but iconfont icon-zhuti"
+      class="button blur theme-mode-but material-icons icon-palette"
       @mouseenter="showModeBox = true"
       @mouseleave="showModeBox = false"
       @click="showModeBox = true"
@@ -32,7 +32,7 @@
           <li
             v-for="item in modeList"
             :key="item.KEY"
-            class="iconfont"
+            class="material-icons"
             :class="[item.icon, { active: item.KEY === currentMode }]"
             @click="toggleMode(item.KEY)"
           >
@@ -61,17 +61,17 @@ export default {
       modeList: [
         {
           name: '跟隨係統',
-          icon: 'icon-zidong',
+          icon: 'icon-brightness-medium',
           KEY: 'auto'
         },
         {
           name: '淺色模式',
-          icon: 'icon-rijianmoshi',
+          icon: 'icon-light-mode',
           KEY: 'light'
         },
         {
           name: '深色模式',
-          icon: 'icon-yejianmoshi',
+          icon: 'icon-dark-mode',
           KEY: 'dark'
         },
         // {

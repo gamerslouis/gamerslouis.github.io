@@ -1,7 +1,7 @@
 <template>
   <div class="pagination">
     <span
-      class="card-box prev iconfont icon-jiantou-zuo"
+      class="card-box prev material-icons icon-chevron-left"
       :class="{ disabled: currentPage === 1 }"
       @click="goPrex()"
     >
@@ -78,7 +78,7 @@
     </div>
 
     <span
-      class="card-box next iconfont icon-jiantou-you"
+      class="card-box next material-icons icon-chevron-right"
       :class="{ disabled: currentPage === pages }"
       @click="goNext()"
     >

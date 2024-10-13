@@ -1,0 +1,73 @@
+// @import url('//fonts.googleapis.com/icon?family=Material+Icons')
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/materialicons/v142/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+.material-icons::before
+  vertical-align: middle;
+  font-family: 'Material Icons'
+  -webkit-font-smoothing: antialiased
+
+.icon-email::before
+  content: "mail"
+
+.icon-rss::before
+  content: "rss_feed"
+
+.icon-home::before
+  content: "home"
+
+.icon-person::before
+  content: "person"
+
+.icon-event::before
+  content: "event"
+
+.icon-folder::before
+  content: "folder"
+
+.icon-arrow-back::before
+  content: "arrow_back"
+
+.icon-comment::before
+  content: "comment"
+
+.icon-palette::before
+  content: "palette"
+
+.icon-chevron-left::before
+  content: "chevron_left"
+
+.icon-chevron-right::before
+  content: "chevron_right"
+
+.icon-label::before
+  content: "label"
+
+.icon-light-mode::before
+  content: "light_mode"
+
+.icon-dark-mode::before
+  content: "dark_mode"
+
+.icon-brightness-medium::before
+  content: "brightness_medium"
+
+
+
+// Extra Icons
+// .icon-github::before
+//    content: "github"
+
+.icon-github::before {
+    background-image: url(/img/icons/github.svg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: inline-block;
+    content: "";
+    width: 1em;
+    height: 1em;
+}

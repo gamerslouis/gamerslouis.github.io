@@ -9,7 +9,7 @@
           <a
             :href="item.link"
             :title="item.title"
-            :class="['iconfont', item.iconClass]"
+            :class="['material-icons', item.iconClass]"
             v-for="(item, index) in blogger.social.icons"
             :key="index"
             target="_blank"
@@ -89,7 +89,7 @@ export default {
       h3
         margin 0.95rem 0 0.6rem
         font-size 1.1rem
-      .icons .iconfont
+      .icons .material-icons
         font-size 1.2rem
         padding-right 0.6rem
         color #777

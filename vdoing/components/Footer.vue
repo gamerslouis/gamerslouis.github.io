@@ -4,7 +4,7 @@
       <a
         :href="item.link"
         :title="item.title"
-        :class="['iconfont', item.iconClass]"
+        :class="['material-icons', item.iconClass]"
         v-for="(item, index) in social.icons"
         :key="index"
         target="_blank"
@@ -52,7 +52,7 @@ export default {
     line-height 1.5rem
   .icons
     margin-bottom 12px
-    .iconfont
+    .material-icons
       padding 0 10px
       font-size 1.3rem
   a

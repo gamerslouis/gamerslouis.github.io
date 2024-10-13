@@ -3,7 +3,7 @@
     <transition-group tag="div" name="post">
       <div
         class="post card-box"
-        :class="item.frontmatter.sticky && 'iconfont icon-zhiding'"
+        :class="item.frontmatter.sticky && 'material-icons icon-zhiding'"
         v-for="item in sortPosts"
         :key="item.key"
       >
@@ -19,7 +19,7 @@
           <div class="article-info">
             <a
               title="作者"
-              class="iconfont icon-touxiang"
+              class="material-icons icon-person"
               target="_blank"
               v-if="item.author && item.author.href"
               :href="item.author.href"
@@ -27,20 +27,20 @@
             >
             <span
               title="作者"
-              class="iconfont icon-touxiang"
+              class="material-icons icon-person"
               v-else-if="item.author"
               >{{ item.author.name ? item.author.name : item.author }}</span
             >
 
             <span
               title="創建時間"
-              class="iconfont icon-riqi"
+              class="material-icons icon-event"
               v-if="item.frontmatter.date"
               >{{ item.frontmatter.date.split(' ')[0] }}</span
             >
             <span
               title="分類"
-              class="iconfont icon-wenjian"
+              class="material-icons icon-folder"
               v-if="
                 $themeConfig.category !== false && item.frontmatter.categories
               "
@@ -54,7 +54,7 @@
             </span>
             <span
               title="標簽"
-              class="iconfont icon-biaoqian tags"
+              class="material-icons icon-label tags"
               v-if="
                 $themeConfig.tag !== false &&
                 item.frontmatter.tags &&
@@ -74,7 +74,7 @@
           <div class="excerpt" v-html="item.excerpt"></div>
           <router-link
             :to="item.path"
-            class="readmore iconfont icon-jiantou-you"
+            class="readmore material-icons icon-chevron-right"
             >閱讀全文</router-link
           >
         </div>

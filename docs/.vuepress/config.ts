@@ -191,7 +191,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       // iconfontCssFile: '//at.alicdn.com/t/xxx.css', // 可選，阿裏圖示庫在線css文件地址，對於主題冇有的圖示可自己添加。阿裏圖片庫：https://www.iconfont.cn/
       icons: [
         {
-          iconClass: 'icon-youjian',
+          iconClass: 'icon-email',
           title: 'Email',
           link: 'mailto:me@louisif.me',
         },

@@ -1,7 +1,7 @@
 <template>
   <div :class="['article-list', { 'no-article-list': isShowArticle }]">
     <div class="article-title">
-      <router-link :to="moreArticle || '/archives/'" class="iconfont icon-bi"
+      <router-link :to="moreArticle || '/archives/'" class="material-icons icon-label"
         >最近更新</router-link
       >
     </div>

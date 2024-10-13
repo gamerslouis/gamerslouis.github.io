@@ -9,7 +9,7 @@
         :key="index"
         :href="item.link"
         :title="item.title"
-        :class="['iconfont', item.iconClass]"
+        :class="['material-icons', item.iconClass]"
         :style="{ width: 100 / social.icons.length + '%' }"
         target="_blank"
       />
