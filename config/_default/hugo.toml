@@ -19,6 +19,9 @@ enableEmoji = true
 
 googleAnalytics = "G-79VDS4QY8D"
 
+[params]
+  defaultOpenGraphImage = "/og_image.png"
+
 [imaging]
   anchor = 'Center'
 
