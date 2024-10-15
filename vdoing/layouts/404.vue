@@ -11,7 +11,7 @@
 <script>
 const msgs = [
   `我是誰？我在哪？`,
-  `看來我們的鏈接壞掉了...`
+  `看來我的連結壞掉了...`
 ]
 
 export default {
