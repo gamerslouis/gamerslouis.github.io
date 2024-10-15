@@ -1,0 +1,9 @@
+{{ define "main" }}
+  <h1 class="mb-3 text-4xl font-extrabold">{{ i18n "error.404_title" | emojify }}</h1>
+  <div class="prose dark:prose-invert">
+    <p>{{ i18n "error.404_description" | emojify }}</p>
+  </div>
+  <div class="mt-8 mb-12 border border-2 border-neutral-200 dark:border-neutral-700 rounded shadow-2xl">
+    <img alt="404" src="/404.png">
+  </div>
+{{ end }}

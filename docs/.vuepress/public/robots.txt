@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-Allow: /archives/
-Allow: /categories/
-Allow: /tags/
-
-Sitemap: https://blog.louisif.me/sitemap.xml

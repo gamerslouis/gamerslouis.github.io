@@ -5,8 +5,8 @@ on:
 
 name: notion
 
-env: # 设置环境变量
-  TZ: Asia/Taipei # 时区（设置时区可使页面中的`最近更新时间`使用该时区时间）
+env:
+  TZ: Asia/Taipei
 
 
 jobs:
@@ -21,9 +21,9 @@ jobs:
       with:
         notion_secret: ${{ secrets.NOTION_TOKEN }}
         database_id: ${{ secrets.NOTION_DB_ID }}
-        output: "./docs/_posts/"
+        output: "./content/posts/"
         migrate_image: local
-        local_path: "./docs/.vuepress/public/img/pages/"
+        local_path: "./static/img/pages/"
         local_url_base: "/img/pages/"
         status_name: status
         status_published: Published
@@ -32,19 +32,3 @@ jobs:
     - uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "[content] New post from notion"
-        
-    - name: Use Node.js # 步骤2
-      uses: actions/setup-node@v1 # 作用：安装nodejs
-      with:
-        node-version: 20.x # 版本
-
-    - name: Build-and-deploy # 步骤3
-      run: |
-        npm install -g pnpm
-        pnpm install
-        pnpm build
-
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: docs/.vuepress/dist

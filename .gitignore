@@ -1,23 +1,8 @@
-# npm
-package-lock.json
-node_modules
+# Generated files by hugo
+/public/
+/resources/_gen/
+/assets/jsconfig.json
+hugo_stats.json
 
-# yarn
-yarn.lock
-yarn-error.log
-
-# pnpm
-pnpm-lock.yaml
-.pnpm-store
-
-# vscode
-.vscode
-
-# vuepress
-docs/.vuepress/dist
-
-# 百度链接推送
-urls.txt
-
-# mac
-.DS_Store
+# Temporary lock file while building
+/.hugo_build.lock
