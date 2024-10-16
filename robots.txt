@@ -1,1 +1,3 @@
 User-agent: *
+Allow: /
+Sitemap: https://blog.louisif.me/sitemap.xml
