@@ -1,7 +1,7 @@
 ---
 categories:
   - Kubernetes
-description: CNCF的Container Network Interface (CNI) Specification導讀，包含 CNI SPEC及CNI Plugin
+description: CNCF 的 Container Network Interface (CNI) Specification 導讀，包含 CNI SPEC 及 CNI Plugin
 tags:
   - CNI
   - 文件翻譯
@@ -55,7 +55,7 @@ CNI 使用了 JSON 作為設定檔的格式，並包含以下幾個主要欄位
 
 plugin configuration object 包含了一些明定的欄位，但 CNI plugin 可能根據需要增加欄位，會由 runtime 在不修改的情況下送給 CNI plugin。
 
-- 必填:
+- 必填：
   - `type` (string): CNI plugin 的執行檔名稱
 - 可選欄位 (CNI protocol 使用):
   - `capabilities` (dictionary): 定義 CNI plugin 支援的 capabilities，後面在 section 3 會介紹。
@@ -71,7 +71,7 @@ plugin configuration object 包含了一些明定的欄位，但 CNI plugin 可�
     - domain (string): DNS search domain
     - search (list of strings),: DNS search domain 列表
     - options (list of strings): DNS options 列表
-- 其他欄位: CNI plugin 自己定義的額外欄位。
+- 其他欄位：CNI plugin 自己定義的額外欄位。
 
 設定檔範例
 
@@ -134,7 +134,7 @@ Runtime 必須在 Runtime 的網路執行，大多數情況下就是在主機的
 Protocol 的參數都是透過環境變數來傳遞的，可能的參數如下
 
 - CNI_COMMAND: 當前執行的 CNI 操作 (可能是 `ADD`, `DEL`, `CHECK`. `VERSION`)
-- CNI_CONTAINERID: 容器的ＩＤ
+- CNI_CONTAINERID: 容器的ID
 - CNI_NETNS: 容器網路空間的參考，如果是使用 namespaces 的方式來切割的話，就是 namespce 的路徑（e.g. `/run/netns/[nsname]` )
 - CNI_IFNAME: 要建立在容器內的介面名稱，如果 plugin 無法建立該名稱則回傳錯誤
 - CNI_ARGS: 其他參數，Alphanumeric 格式的 key-value pairs，使用分號隔開”e.g. `FOO=BAR;ABC=123`
@@ -283,7 +283,7 @@ Runtime 必須持久保存最後一個 plugin 的結果，用於 check 和 delet
 
 如同 section 2 所述，execution configuration 使用 JSON 格式並透過 stdin 傳給 CNI plugin。
 
-- 必要的欄位如下:
+- 必要的欄位如下：
   - cniVersion: 同 network configuraion 中 cniVersion 的值
   - name: 同 network configuraion 中 name 的值
   - runtimeConfig: runtime 需要和 plugin 可提供的 capabilities 的聯集 (capability 會在後面討論)
@@ -341,7 +341,7 @@ Runtime 執行 CNI plugin 時，會根據 `capabilities` 生成 `runtimeConfig`�
 
 ### Delegated plugin execution procedure
 
-- 當 CNI plugin 執行 delegated plugin 時:
+- 當 CNI plugin 執行 delegated plugin 時：
   - 在 `CNI_PATH` 路徑下搜尋 plugin 的可執行程式
   - 使用 CNI plugin 的環境變數參數和 execute configuration，作為 delegated plugin 的輸入
   - 確保 delegated plugin 的 stderr 會輸出到 CNI plugin 的 stderr

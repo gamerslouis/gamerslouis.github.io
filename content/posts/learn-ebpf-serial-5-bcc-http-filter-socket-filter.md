@@ -1,9 +1,9 @@
 ---
 categories:
   - eBPF
-description: 2022 iThome鐵人賽 學習eBPF系列 介紹http-parser實例以及socket filter
+description: 2022 iThome 鐵人賽 學習 eBPF 系列 介紹 http-parser 實例以及 socket filter
 tags:
-  - 2022 iThome鐵人賽 - 學習 eBPF 系列
+  - 2022 iThome 鐵人賽 - 學習 eBPF 系列
   - 技術分享
 date: 2022-10-31
 title: 學習 eBPF 系列 5 - BCC HTTP Filter & Socket Filter
@@ -255,7 +255,7 @@ u64 bpf_dext_pkt(void *pkt, u64 off, u64 bofs, u64 bsz) {
 | ------------ | ------ | ----------------- |
 | mode         | size   | instruction class |
 
-在  `BPF_LD`  這個分類內，size bits 01 剛好對應到  `BPF_H` (half word (2 bytes))最前面的 3 個 bit 000 代表  `BPF_ABS`(legacy BPF packet access)。
+在  `BPF_LD`  這個分類內，size bits 01 剛好對應到  `BPF_H` (half word (2 bytes)) 最前面的 3 個 bit 000 代表  `BPF_ABS`(legacy BPF packet access)。
 
 到這邊我們就理解它是怎麼運作了了，eBPF 定義了  `BPF_ABS`  來代表對封包的存取操作，LLVM 在編譯的時會將對 skb 的 load_byte 轉譯成對應的 instruction。
 

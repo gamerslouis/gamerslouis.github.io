@@ -1,7 +1,7 @@
 ---
 categories:
   - Proxmox
-description: 紀錄如何在Proxmox上開OpenVPN client的LXC，作為整個子網域的跳板
+description: 紀錄如何在 Proxmox 上開 OpenVPN client 的 LXC，作為整個子網域的跳板
 tags:
   - OpenVPN
   - LXC

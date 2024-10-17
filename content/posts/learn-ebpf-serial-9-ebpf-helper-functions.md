@@ -1,9 +1,9 @@
 ---
 categories:
   - eBPF
-description: 2022 iThome鐵人賽 學習eBPF系列 列舉eBPF helper function及其用途
+description: 2022 iThome 鐵人賽 學習 eBPF 系列 列舉 eBPF helper function 及其用途
 tags:
-  - 2022 iThome鐵人賽 - 學習 eBPF 系列
+  - 2022 iThome 鐵人賽 - 學習 eBPF 系列
   - 技術分享
 date: 2022-10-31
 title: 學習 eBPF 系列 9 - eBPF helper functions
@@ -50,7 +50,7 @@ title: 學習 eBPF 系列 9 - eBPF helper functions
   - bpf_ktime_get_boot_ns
 - 取得 jiffies64
   - bpf_jiffies64
-- 將字串訊息發送到 /sys/kernel/debug/tracing/trace ，主要用於開發除錯
+- 將字串訊息發送到 /sys/kernel/debug/tracing/trace，主要用於開發除錯
   - bpf_trace_printk
 - 寫入 seq_file
   - bpf_seq_write

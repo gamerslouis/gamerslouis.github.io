@@ -1,9 +1,9 @@
 ---
 categories:
   - eBPF
-description: 2022 iThome鐵人賽 學習eBPF系列 介紹eBPF實例neighbor_sharing以及Linux tc子系統
+description: 2022 iThome 鐵人賽 學習 eBPF 系列 介紹 eBPF 實例 neighbor_sharing 以及 Linux tc 子系統
 tags:
-  - 2022 iThome鐵人賽 - 學習 eBPF 系列
+  - 2022 iThome 鐵人賽 - 學習 eBPF 系列
   - 技術分享
 date: 2022-10-31
 title: 學習 eBPF 系列 7 - tc & BCC neighbor_sharing
@@ -23,7 +23,7 @@ tc 的工作時機點分成  `ingress tc`  和  `egress tc`，以  `ingress 
 
 tc 的基礎是 queue，封包要進出主機時，會先進入 queue，根據特定的策略重新排序、刪除、延遲後再交給網卡送出，或 netfilter 等系統收入。
 
-`qdisc`  是套用在這個 queue 上面的策略規則。下列舉例一部份:
+`qdisc`  是套用在這個 queue 上面的策略規則。下列舉例一部份：
 
 - 最基本的策略規則是 pfifo，就是一個簡單的 FIFO queue，只能設定 queue 的可儲存的封包大小和封包個數。
 - 更進階的如 pfifo_fast，會根據 ip 封包內的  `ToS`  欄位將封包分成三個優先度，每個優先度內是走 FIFO 規則，但是會優先清空高優先度的封包。

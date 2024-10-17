@@ -1,9 +1,9 @@
 ---
 categories:
   - eBPF
-description: 2022 iThome鐵人賽 學習eBPF系列 介紹eBPF的基本概念
+description: 2022 iThome 鐵人賽 學習 eBPF 系列 介紹 eBPF 的基本概念
 tags:
-  - 2022 iThome鐵人賽 - 學習 eBPF 系列
+  - 2022 iThome 鐵人賽 - 學習 eBPF 系列
   - 技術分享
 date: 2022-10-31
 title: 學習 eBPF 系列 2 - 基本概念
@@ -164,7 +164,7 @@ eBPF 程式需要嵌入到 kernel 執行，因此 eBPF 程式的安全性是極�
 
 首先 eBPF 程式必須要在有限的時間內執行完成，不然就會造成 kernel 卡死，因此在早期的版本中 verifier 是拒絕任何 loop 的存在的，整個程式碼必須是一張 DAG (有向無環圖)。不過在 kernel 5.3 版本開始，verifier 允許了有限次數的循環，verifier 會透過模擬執行檢查 eBPF 是不是會在有限次數內在所有可能的分支上走到 `bpf_exit`。
 
-接著 eBPF 程式的大小也存在限制，早期只一個 eBPF 程式只允許 4096 個 ebpf vm 的 instruction ｓ，在設計比較複雜的 eBPF 程式上有些捉襟見肘，因此後來在 [5.2 版](https://github.com/torvalds/linux/commit/c04c0d2b968ac45d6ef020316808ef6c82325a82) 這個限制被放寬成 1 million 個指令，基本上是十分夠用了，也還是能確保 ebpf 程式在 1/10 秒內執行完成。
+接著 eBPF 程式的大小也存在限制，早期只一個 eBPF 程式只允許 4096 個 ebpf vm 的 instruction s，在設計比較複雜的 eBPF 程式上有些捉襟見肘，因此後來在 [5.2 版](https://github.com/torvalds/linux/commit/c04c0d2b968ac45d6ef020316808ef6c82325a82) 這個限制被放寬成 1 million 個指令，基本上是十分夠用了，也還是能確保 ebpf 程式在 1/10 秒內執行完成。
 
 然後程式的 stack 也存在大小限制，目前限制是 512。
 
@@ -249,13 +249,13 @@ systcl -w net.core.bpf_jit_enable=1
 
 如果只是需要 eBPF 程式單方面的輸出訊息，讓我們可以偵錯，可以使用比較簡單的手段。eBPF 有提供一個 helper function `long bpf_trace_printk (const char *fmt, u32 fmt_size, ...)`，可以輸入一個格式化字串 `fmt`，及最多三個變數 (參數個數的限制)。輸出結果會被輸出到 `/sys/kernel/debug/tracing/trace_pipe` 中。.
 
-可以透過指令查看輸出結果:
+可以透過指令查看輸出結果：
 
 ```shell
 sudo cat /sys/kernel/debug/tracing/trace_pipe
 ```
 
-輸出的格式如下:
+輸出的格式如下：
 
 ```text
 telnet-470   [001] .N.. 419421.045894: 0x00000001: <formatted msg>

@@ -1,9 +1,9 @@
 ---
 categories:
   - eBPF
-description: 2022 iThome鐵人賽 學習eBPF系列 介紹eBPF實例tcpconnect以及kprobe
+description: 2022 iThome 鐵人賽 學習 eBPF 系列 介紹 eBPF 實例 tcpconnect 以及 kprobe
 tags:
-  - 2022 iThome鐵人賽 - 學習 eBPF 系列
+  - 2022 iThome 鐵人賽 - 學習 eBPF 系列
   - 技術分享
 date: 2022-10-31
 title: 學習 eBPF 系列 4 - BCC tcpconnect
