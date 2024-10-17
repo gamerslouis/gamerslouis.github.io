@@ -1,7 +1,7 @@
 ---
 categories:
   - OpenStack
-description: 介紹如何設定OpenStack Anisble (OSA)，使用OSA部屬OpenStack
+description: 介紹如何設定 OpenStack Anisble (OSA)，使用 OSA 部屬 OpenStack
 tags:
   - 系統建置教學
 date: 2022-11-01
@@ -303,7 +303,7 @@ SERVICE_NAME:
 
 > 透過 openstack-ansible 指令執行 ansible 時，會將 /etc/openstack*deploy 目錄下的 user*\*.yml 檔案會作為 ansible 的 varible file，在執行 playbook 的時候被自動加入。
 
-在 user_variables.yml 中，可以對 OSA 所有組件的部屬和設定進行調整。參照 OSA 的  [官方文件](https://docs.openstack.org/project-deploy-guide/openstack-ansible/victoria/configure.html#advanced-service-configuration)，這邊每一個 role 對應到 OSA 部屬的每個 service，裡面有列出每個 service 每個設定的預設值。通常設定會使用 service name 當作 prefix，例如  `glance_etc_dir`  可以修改 glance 的設定檔位置，預設是 “/etc/glance”，可能可以修改為 “/usr/local/etc/glance”。另外一份是進階設定的  [reference](https://docs.openstack.org/openstack-ansible/victoria/reference/configuration/using-overrides.html#top)，有比較詳細對 user_varialbes 設定的說明。
+在 user_variables.yml 中，可以對 OSA 所有組件的部屬和設定進行調整。參照 OSA 的  [官方文件](https://docs.openstack.org/project-deploy-guide/openstack-ansible/victoria/configure.html#advanced-service-configuration)，這邊每一個 role 對應到 OSA 部屬的每個 service，裡面有列出每個 service 每個設定的預設值。通常設定會使用 service name 當作 prefix，例如  `glance_etc_dir`  可以修改 glance 的設定檔位置，預設是“/etc/glance”，可能可以修改為“/usr/local/etc/glance”。另外一份是進階設定的  [reference](https://docs.openstack.org/openstack-ansible/victoria/reference/configuration/using-overrides.html#top)，有比較詳細對 user_varialbes 設定的說明。
 
 這邊提幾個可能比較需要注意到的設定項目
 

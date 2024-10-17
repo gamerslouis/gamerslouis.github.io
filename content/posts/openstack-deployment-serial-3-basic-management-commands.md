@@ -1,7 +1,7 @@
 ---
 categories:
   - OpenStack
-description: 介紹OpenStack的基本操作，如建立虛擬機的流程
+description: 介紹 OpenStack 的基本操作，如建立虛擬機的流程
 tags:
   - 系統建置教學
 date: 2022-11-03

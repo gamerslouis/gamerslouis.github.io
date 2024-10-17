@@ -1,9 +1,9 @@
 ---
 categories:
   - eBPF
-description: 2022 iThome鐵人賽 學習eBPF系列 介紹BCC，一個python的eBPF框架
+description: 2022 iThome 鐵人賽 學習 eBPF 系列 介紹 BCC，一個 python 的 eBPF 框架
 tags:
-  - 2022 iThome鐵人賽 - 學習 eBPF 系列
+  - 2022 iThome 鐵人賽 - 學習 eBPF 系列
   - 技術分享
 date: 2022-10-31
 title: 學習 eBPF 系列 3 - BCC 介紹
@@ -15,7 +15,7 @@ BPF Compiler Collection ([BCC](https://github.com/iovisor/bcc)) 是一套用於 
 
 ### 介紹
 
-BCC 我覺得可以看成兩個部分:
+BCC 我覺得可以看成兩個部分：
 
 - eBPF 的 python 和 lua 的前端，透過 BCC 我們可以使用 python 和 lua 比較簡單的開發 eBPF 的應用程式，BCC 將 bpf system call 還有 eBPC 程式編譯封裝成了 API，並提供一系列預先定義好的巨集和語法來簡化 eBPF 程式。
 

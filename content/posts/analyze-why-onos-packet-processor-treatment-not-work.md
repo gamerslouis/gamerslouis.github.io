@@ -1,7 +1,7 @@
 ---
 categories:
   - ONOS
-description: 分析ONOS上Openflow Packet Processor無法處理packet out以外的treatment的原因
+description: 分析 ONOS 上 Openflow Packet Processor 無法處理 packet out 以外的 treatment 的原因
 tags:
   - Debug
 date: 2022-08-12
@@ -52,7 +52,7 @@ protected void activate() {
 
 PacketContext 會包含 packet-in 進來的封包內容，並可透過 context.treatmentBuilder 修改封包和決定要往哪個 port 送出去，最後透過 send 指令，packet-out 回交換機。
 
-搜查一下 ONOS 的原始碼，會在 core/api 下面找到 DefaultPacketContext ，這個 class 實作了 PacketContext 這個 Interface，但是這個 class 是一個 abstract class，因此一定有人繼承了它，繼續搜查 PacketContext 這個字會找到兩個跟 Openflow 相關的，DefaultOpenFlowPacketContext 和 OpenFlowCorePacketContext，但是後者才有繼承 DefaultPacketContext 和實作 PacketContext 介面，因此 PacketProcesser 在處理 openflow packet-in 進來的封包時，拿到的 PacketContext 具體應該是 OpenFlowCorePacketContext 這個 class。
+搜查一下 ONOS 的原始碼，會在 core/api 下面找到 DefaultPacketContext，這個 class 實作了 PacketContext 這個 Interface，但是這個 class 是一個 abstract class，因此一定有人繼承了它，繼續搜查 PacketContext 這個字會找到兩個跟 Openflow 相關的，DefaultOpenFlowPacketContext 和 OpenFlowCorePacketContext，但是後者才有繼承 DefaultPacketContext 和實作 PacketContext 介面，因此 PacketProcesser 在處理 openflow packet-in 進來的封包時，拿到的 PacketContext 具體應該是 OpenFlowCorePacketContext 這個 class。
 
 打開 OpenFlowCorePacketContext.java 會看到它實現了 send 這個 function，經過簡單的檢查後呼叫 sendPacket 這個 function，然後你就會看到…
 

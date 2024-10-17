@@ -1,9 +1,9 @@
 ---
 categories:
   - eBPF
-description: 2022 iThome鐵人賽 學習eBPF系列 前言及背景介紹
+description: 2022 iThome 鐵人賽 學習 eBPF 系列 前言及背景介紹
 tags:
-  - 2022 iThome鐵人賽 - 學習 eBPF 系列
+  - 2022 iThome 鐵人賽 - 學習 eBPF 系列
   - 技術分享
 date: 2022-10-31
 title: 學習 eBPF 系列 1 - 摘要與簡介
@@ -11,7 +11,7 @@ title: 學習 eBPF 系列 1 - 摘要與簡介
 
 ## 前言
 
-這個系列是 2022 年參加 ithome 鐵人 30w 競賽的產物，參賽主題是 “[教練我想玩 eBPF](https://ithelp.ithome.com.tw/users/20152703/ironman/5911)“，因為近年來 eBPF 成為 cloud native 的一個熱門話題，在 COSCUP2022 還有一些 meetup 的活動都在討論這個議題，因此希望能夠找個機會來學習這項技術，借助這個比賽的機會，來學習和整理 eBPF 的知識，比賽結束後將這三十天的產出重新整理後重新發表，成為本 “學習 eBPF 系列”。
+這個系列是 2022 年參加 ithome 鐵人 30w 競賽的產物，參賽主題是“[教練我想玩 eBPF](https://ithelp.ithome.com.tw/users/20152703/ironman/5911)“，因為近年來 eBPF 成為 cloud native 的一個熱門話題，在 COSCUP2022 還有一些 meetup 的活動都在討論這個議題，因此希望能夠找個機會來學習這項技術，借助這個比賽的機會，來學習和整理 eBPF 的知識，比賽結束後將這三十天的產出重新整理後重新發表，成為本“學習 eBPF 系列”。
 
 <!-- more -->
 
@@ -49,7 +49,7 @@ tcpdump -d ip
   - 不是的話，跳到 Line 3 `return 0`
 - `ret` 指令結束 BPF 並根據回傳值決定是不是要擷取該封包，回傳值為 0 的話表示不要，非 0 的話則帶表要擷取的封包長度，tcpdump 預設指定的擷取長度是 262144 bytes。
 
-BPF 提供了一個高效、可動態修改的 kernal 執行環境的概念，這個功能不僅只能用在封包過濾還能夠用在更多地方，因此在 Linux kernal 3.18 加入了 eBPF 的功能，提供了一個 “通用的” in-kernal 虛擬機。承接了 BPF 的概念，改進了虛擬機的功能與架構，支援了更多的虛擬機啟動位置，使 eBPF 可以用在更多功能上。
+BPF 提供了一個高效、可動態修改的 kernal 執行環境的概念，這個功能不僅只能用在封包過濾還能夠用在更多地方，因此在 Linux kernal 3.18 加入了 eBPF 的功能，提供了一個“通用的”in-kernal 虛擬機。承接了 BPF 的概念，改進了虛擬機的功能與架構，支援了更多的虛擬機啟動位置，使 eBPF 可以用在更多功能上。
 
 也因為 eBPF 做為一個現行更通用更強大的技術，因此現在提及 BPF 常常指的是 eBPF，而傳統的 BPF 則用 classic BPF (cBPF) 來代指。
 

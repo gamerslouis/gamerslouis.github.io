@@ -1,7 +1,7 @@
 ---
 categories:
   - OpenStack
-description: 釐清OpenStack的網路架構，介紹flat, vlan, vxlan三種不同網路模式的差別，以及provider, self-service的不同
+description: 釐清 OpenStack 的網路架構，介紹 flat, vlan, vxlan 三種不同網路模式的差別，以及 provider, self-service 的不同
 tags:
   - 系統建置教學
 date: 2022-10-05
@@ -66,7 +66,7 @@ title: OpenStack 架設系列 (1) - 網路架構解析及設置
 
 ### Vxlan network
 
-首先我們先介紹一下 vxlan。和 vlan 的功能類似，vxlan 的功能也是在一個網路內切割出多個覆蓋網路，不過教於 vlan，vxlan 有以下特點:
+首先我們先介紹一下 vxlan。和 vlan 的功能類似，vxlan 的功能也是在一個網路內切割出多個覆蓋網路，不過教於 vlan，vxlan 有以下特點：
 
 - vlan id 只能夠切出 4096 個網路，但是 vxlan id 可以切出 2 的 24 次方個網路。
 - vlan 只是在 ethernet header 和 IP header 中間插了一個 vlan header，因此 vlan 只能在 L2 的物理網路內傳輸。但是 vxlan 的封裝方式是將整個 L2 封包加上一個 vxlan header 後，封裝在一個 UDP 封包內，因此透過外面的 UDP 封包，vxlan 能夠跨越 L3 網路建立 L2 的通道，連結兩個不相連的 L2 網路。
@@ -211,7 +211,7 @@ openstack router create router1
 openstack port create --network net1 net1-router-port
 ```
 
-接著為了讓租戶網路能夠 “接線” 到 router，我們需要幫網路建立一個 port
+接著為了讓租戶網路能夠“接線”到 router，我們需要幫網路建立一個 port
 
 ```shell
 openstack router add port router1 net1-router-port

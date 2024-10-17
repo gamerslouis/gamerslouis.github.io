@@ -2,7 +2,7 @@
 categories:
   - Terraform
   - Proxmox
-description: 使用Terraform來在Proxmox上自動部屬大量虛擬機
+description: 使用 Terraform 來在 Proxmox 上自動部屬大量虛擬機
 tags:
   - 自動化
   - 系統建置教學
