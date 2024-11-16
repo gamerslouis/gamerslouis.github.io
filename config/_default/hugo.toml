@@ -19,6 +19,8 @@ enableEmoji = true
 
 googleAnalytics = "G-79VDS4QY8D"
 
+hasCJKLanguage = true
+
 [params]
   defaultOpenGraphImage = "/og_image.png"
 
