@@ -30,6 +30,11 @@
   pageRef = "tags"
   weight = 30
 
+[[main]]
+  name = "Awesome"
+  pageRef = "awesome"
+  weight = 40
+
 #[[main]]
 #  name = "Parent"
 #  weight = 20

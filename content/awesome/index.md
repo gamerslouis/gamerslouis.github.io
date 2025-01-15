@@ -1,0 +1,4 @@
+---
+title: Awesome
+layout: awesome
+---
