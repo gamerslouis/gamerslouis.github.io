@@ -1,0 +1,62 @@
+{{ define "main" }}
+<article class="max-w-full">
+  <header>
+    {{ if .Params.showBreadcrumbs | default (.Site.Params.article.showBreadcrumbs | default false) }}
+    {{ partial "breadcrumbs.html" . }}
+    {{ end }}
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      {{ .Title | emojify }}
+    </h1>
+  </header>
+  <section class="max-w-full mt-6 prose dark:prose-invert">
+    {{ $data := dict }}
+    {{ $path := "awesome.yaml" }}
+    {{ with .Resources.Get $path }}
+    {{ with . | transform.Unmarshal }}
+    {{ $data = . }}
+    {{ end }}
+    {{ else }}
+    {{ errorf "Unable to get page resource %q" $path }}
+    {{ end }}
+    {{ range $data }}
+    <h2 class="relative group" id="{{ .name | urlize }}">
+      {{ .name }}
+    </h2>
+    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      {{ range .items }}
+      <a id="{{ .name | urlize }}" target="_blank" href="{{ .link }}" class="cursor-pointer">
+        <div
+        class="pt-3 p-5 border border-neutral-200 dark:border-neutral-700 border rounded-md shadow-2xl hover:border-neutral-400 hover:dark:border-neutral-500 transition-colors duration-200">
+
+          <div class="flex items-center">
+            <span class="text-2xl text-neutral-800 dark:text-neutral" style="margin-right:10px;">
+              {{ if .icon }}
+                {{ if (strings.HasPrefix .icon "http") }}
+                  <img src="{{ .icon }}" alt="{{ .name }}" class="not-prose" style="height: 24px; width: 24px;" />
+                {{ else }}
+                  {{ partial "icon.html" .icon }}
+                {{ end }}
+              {{ else }}
+                {{ partial "icon.html" "check" }}
+              {{ end }}
+            </span>
+            <div id="{{ .name | urlize }}-full_name"
+              class="m-0 font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral">
+              {{ .name | markdownify }}
+            </div>
+          </div>
+
+          <p id="{{ .name | urlize }}-description" class="m-0 mt-2 text-md text-neutral-800 dark:text-neutral">
+            {{ .description | markdownify }}
+          </p>
+        </div>
+      </a>
+      {{ end }}
+    </div>
+    {{ end }}
+  </section>
+  <footer class="pt-8">
+    {{ partial "sharing-links.html" . }}
+  </footer>
+</article>
+{{ end }}
