@@ -1,0 +1,22 @@
+- name: Kubernetes
+  items:
+  - name: k9s
+    description: 提供 htop 這樣可互動的 CLI 介面的 Kubernetes 管理工具
+    link: https://github.com/derailed/k9s
+    icon: github
+  - name: kubectx
+    description: 切換 kubectl kubeconfig context 及 namespace 的指令腳本
+    link: https://github.com/ahmetb/kubectx
+    icon: github
+- name: Shell
+  items:
+  - name: thefuck
+    description: CLI 指令自動更正的工具
+    link: https://github.com/nvbn/thefuck
+    icon: github
+- name: Self Host
+  items:
+  - name: homepage
+    description: 好看的個人入口網站方案
+    link: https://github.com/gethomepage/homepage
+    icon: github
