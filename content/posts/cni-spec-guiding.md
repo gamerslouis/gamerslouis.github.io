@@ -134,7 +134,7 @@ Runtime 必須在 Runtime 的網路執行，大多數情況下就是在主機的
 Protocol 的參數都是透過環境變數來傳遞的，可能的參數如下
 
 - CNI_COMMAND: 當前執行的 CNI 操作 (可能是 `ADD`, `DEL`, `CHECK`. `VERSION`)
-- CNI_CONTAINERID: 容器的ID
+- CNI_CONTAINERID: 容器的 ID
 - CNI_NETNS: 容器網路空間的參考，如果是使用 namespaces 的方式來切割的話，就是 namespce 的路徑（e.g. `/run/netns/[nsname]` )
 - CNI_IFNAME: 要建立在容器內的介面名稱，如果 plugin 無法建立該名稱則回傳錯誤
 - CNI_ARGS: 其他參數，Alphanumeric 格式的 key-value pairs，使用分號隔開”e.g. `FOO=BAR;ABC=123`

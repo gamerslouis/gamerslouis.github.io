@@ -92,7 +92,7 @@ Multipart Upload 是 S3 API 提供的一種上傳機制，簡單來說，它將�
 
 ![](/img/pages/69df10ea423326ab18cc8a35dc0b0477.png)
 
-從S3 API的角度來看，使用 Multipart Upload 進行檔案上傳，需要以下三個步驟：
+從 S3 API 的角度來看，使用 Multipart Upload 進行檔案上傳，需要以下三個步驟：
 
 1. 建立上傳任務：使用 CreateMultipartUpload 指定上傳路徑（Object Key），建立上傳任務。此時，S3 會回傳一個唯一的 uploadId，用於識別該上傳任務。
 
@@ -102,7 +102,7 @@ Multipart Upload 是 S3 API 提供的一種上傳機制，簡單來說，它將�
     + partNumber 不需要連續，但最終必須按順序排列。
     + 各區塊可平行上傳，無需等待前一個區塊完成。
 
-3. 完成上傳：最後，呼叫 CompleteMultipartUpload，將S3會將所有區塊合併成完整檔案，並完成上傳。
+3. 完成上傳：最後，呼叫 CompleteMultipartUpload，將 S3 會將所有區塊合併成完整檔案，並完成上傳。
 
 ### 中斷與清理機制
 若上傳任務中斷或失敗，部分已上傳的區塊會被保存在 Object Storage 中，這些稱為 incomplete multipart uploads。它們會占用存儲空間，因此需定期清理：
@@ -148,7 +148,7 @@ response = s3_client.complete_multipart_upload(
     MultipartUpload={'Parts': parts}
 )
 ```
-最後，我們使用 complete_multipart_upload 完成上傳，我們可以同時帶上每個 Part 上傳後的 ETag，以確保所有區塊都已成功上傳，在`MultipartUpload={'Parts': parts}`中我們還可以帶上每個 Part 的 Checksum 或著提供整個檔案的Checksum，以確保檔案的完整性。
+最後，我們使用 complete_multipart_upload 完成上傳，我們可以同時帶上每個 Part 上傳後的 ETag，以確保所有區塊都已成功上傳，在`MultipartUpload={'Parts': parts}`中我們還可以帶上每個 Part 的 Checksum 或著提供整個檔案的 Checksum，以確保檔案的完整性。
 
 如果中途上船失敗了，我們可以呼叫 s3 的 AbortMultipartUpload 來取消上傳任務，並刪除已經上傳的區塊。
 
@@ -162,7 +162,7 @@ response = s3_client.abort_multipart_upload(
 ```
 
 ## 總結
-今天我們介紹了S3的python SDK boto3，並且深入探討了S3的Multipart Upload機制，透過Multipart Upload，我們可以更有效率地上傳大檔案，提高可靠性，並且即時處理檔案。
+今天我們介紹了 S3 的 python SDK boto3，並且深入探討了 S3 的 Multipart Upload 機制，透過 Multipart Upload，我們可以更有效率地上傳大檔案，提高可靠性，並且即時處理檔案。
 當然更加詳細的使用說明，可以參考 AWS S3 和 boto3 的文件。
 
 ## 參考資料
