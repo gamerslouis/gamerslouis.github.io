@@ -1,7 +1,7 @@
 ---
 categories:
   - 部落格
-description: 
+description: 繼將部落格框架從 Hexo 換到 Vue 再換到 Hugo，我的部落格撰寫流程也迎來了一個重大的改變。從原本使用 Notion 來管理及撰寫文章，轉換到使用 Obsidian 來完成。今天，我將介紹是什麼促使我從 Notion 轉換到 Obsidian，並且說明在使用 Obsidian 搭配 Hugo 撰寫 Markdown 部落格時，應該如何進行設定與整合。
 tags:
   - Obsidian
 date: 2025-05-24
