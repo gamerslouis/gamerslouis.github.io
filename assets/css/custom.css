@@ -183,3 +183,9 @@ code,kbd,samp,pre {
 /* GenericTraceback */ .chroma .gt:is(.dark *) {  }
 /* GenericUnderline */ .chroma .gl:is(.dark *) {  }
 /* TextWhitespace */ .chroma .w:is(.dark *) {  }
+
+/* Awesome page hover effect */
+.hover\:dark\:border-neutral-500:is(.dark *):hover {
+  --tw-border-opacity:1;
+  border-color:rgba(var(--color-neutral-500), var(--tw-border-opacity))
+}
