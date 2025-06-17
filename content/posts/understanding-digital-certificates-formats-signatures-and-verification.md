@@ -162,14 +162,14 @@ Authority Information Access: 
 
 以 Let's Encrypt 為例，其[官方說明](https://letsencrypt.org/zh-tw/certificates/#%E4%BA%A4%E4%BA%92%E7%B0%BD%E5%90%8D)中提到：Let's Encrypt Authority X3 中間憑證擁有一對公開金鑰和私有金鑰。Let's Encrypt 使用這個私有金鑰來簽署所有終端憑證，也就是我們最終從 Let's Encrypt 獲得的憑證。Let's Encrypt Authority X3 中間憑證本身則是由 ISRG Root X1 根憑證所簽發。然而，ISRG Root X1 在早期尚未受到大多數瀏覽器的信任。為了解決這個問題，並使 Let's Encrypt 頒發的憑證能夠被廣泛信任，Let's Encrypt 向一個已受主流瀏覽器信任的根憑證 DST Root CA X3 請求了交互簽名。經過 DST Root CA X3 的簽名後，產生了另一個版本的 Let's Encrypt Authority X3 中間憑證。
 
-{{< mermaid >}}
+```mermaid
 graph TD
     A[ISRG Root X1] --> C[Let's Encrypt Authority X3]
     B[DST Root CA X3] --> C
     C --> D[Server Cert]
     C --> E[Server Cert]
     C --> F[Server Cert]
-{{< /mermaid >}}
+```
 
 ### 多路徑信任鏈：彈性與兼容性
 

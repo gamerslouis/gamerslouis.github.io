@@ -131,13 +131,13 @@ app.mount("/metrics", make_prometheus_app())
 
 `CollectorRegistry` 是用來管理所有計數器的結構，所有的 Counter、Gauge、Histogram、Summary 都會向一個或多個 Registry 註冊。當我們訪問 `/metrics` 時，實際上是呼叫 registry 的 `collect()` 方法，registry 會對應調用所有註冊在裡面計數器的 `collect()` 方法，將所有 metrics 資料合併起來導出。
 
-{{< mermaid >}}
+```mermaid
 graph TD
 Endpoint -- Collect --> Registry
 Registry -- Collect --> Counter1
 Registry -- Collect --> Counter2
 Registry -- Collect --> Counter3
-{{< /mermaid >}}
+```
 
 前面我們定義 `Counter` 和使用 `make_metrics_app` 的時候沒有定義 `registry`，但是 prometheus client 會使用一個預設的 `registry` 來保存。
 
@@ -180,7 +180,7 @@ app.mount("/metrics", make_prometheus_app())
 
 這邊，我們定義了一個空的 `registry` 覆蓋 `make_asgi_app` 預設的 `REGISTRY`，並且其中只有放入 MultiProcessCollector。所以當我們呼叫 `/metrics` 的時候，等價於呼叫 `MultiProcessCollector.collect()`，MultiProcessCollector 會讀取 `PROMETHEUS_MULTIPROC_DIR` 中的所有的檔案，將所有 process 的 metrics 資料合併起來導出。
 
-{{< mermaid >}}
+```mermaid
 graph TD
 Endpoint -- Collect --> Registry
 Registry -- Collect --> MultiProcessCollector
@@ -189,7 +189,7 @@ MultiProcessCollector -- Read Files --> PROMETHEUS_MULTIPROC_DIR
 Counter1-- Write --> PROMETHEUS_MULTIPROC_DIR
 Counter2-- Write --> PROMETHEUS_MULTIPROC_DIR
 Counter3-- Write --> PROMETHEUS_MULTIPROC_DIR
-{{< /mermaid >}}
+```
 
 在 prometheus 裡面，計數器有 `Counter`, `Gauge`, `Histogram`, `Summary` 等種類，對於每個類型計數器的不同 Process，prometheus client 都會寫到 PROMETHEUS_MULTIPROC_DIR/<Kind>_<PID>.db 的檔案裏面。
 
