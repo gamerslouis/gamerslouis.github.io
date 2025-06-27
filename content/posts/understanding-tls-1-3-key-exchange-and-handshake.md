@@ -7,9 +7,9 @@ tags:
   - HTTPS
   - 網路協定
   - 資安
-date: 2025-06-25
+date: 2025-06-28
 title: 搞懂 TLS 1.3：更快、更安全的次世代傳輸層安全協定
-draft: true
+draft: false
 ---
 
 在上一篇文章《[搞懂 TLS 1.2 金鑰交換原理與握手](https://blog.louisif.me/posts/understanding-tls-1-2-key-exchange-and-handshake)》中，我們已經對 TLS 1.2 的運作原理有了全面的了解。本文將以此為基礎，深入探討 TLS 1.3 帶來的改變。TLS 1.3 是一次大幅度的重新設計，解決了許多歷史遺留的安全性問題。

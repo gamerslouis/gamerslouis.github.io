@@ -7,9 +7,9 @@ tags:
   - HTTPS
   - 網路協定
   - 資安
-date: 2025-06-25
+date: 2025-06-28
 title: 搞懂 TLS 1.2 金鑰交換原理與握手
-draft: true
+draft: false
 ---
 
 {{< katex >}}
