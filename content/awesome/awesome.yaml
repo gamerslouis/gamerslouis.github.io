@@ -14,6 +14,10 @@
     description: CLI 指令自動更正的工具
     link: https://github.com/nvbn/thefuck
     icon: github
+  - name: chezmoi
+    description: dot files 管理工具
+    link: https://github.com/twpayne/chezmoi
+    icon: github
 - name: Self Host
   items:
   - name: homepage
