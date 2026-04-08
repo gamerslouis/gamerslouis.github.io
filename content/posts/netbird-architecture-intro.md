@@ -8,7 +8,7 @@ tags:
   - 網路
   - VPN
   - Wireguard
-date: 2026-03-21
+date: 2026-04-08
 title: NetBird 架構介紹：WireGuard + ICE 如何建立 Peer-to-Peer 連線
 draft: false
 ---
