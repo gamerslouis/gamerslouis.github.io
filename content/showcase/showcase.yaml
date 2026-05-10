@@ -1,0 +1,8 @@
+- name: yet-another-toolbox
+  description: Web 工具集
+  link: https://tools.louisif.me
+  icon: https://tools.louisif.me/favicon.svg
+- name: travel-tokyo-2025
+  description: 2025 東京旅遊紀錄
+  link: https://travel-tokyo-2025.louisif.me
+  icon: https://travel-tokyo-2025.louisif.me/icon.ico

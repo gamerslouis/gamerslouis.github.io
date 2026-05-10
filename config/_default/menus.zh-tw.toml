@@ -36,6 +36,11 @@
   weight = 40
 
 [[main]]
+  name = "Showcase"
+  pageRef = "showcase"
+  weight = 45
+
+[[main]]
   name = "RSS"
   url = "https://blog.louisif.me/index.xml"
   weight = 50
