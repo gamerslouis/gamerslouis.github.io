@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" width="960" height="460"
+     font-family="'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', 'Helvetica Neue', Arial, sans-serif"
+     font-size="13" fill="#333">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#888"/>
+    </marker>
+    <marker id="arrow-wait" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e08e0b"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="460" fill="#ffffff"/>
+
+  <!-- writer arrivals: each one resets the whole table -->
+  <g stroke="#d64545" stroke-width="1.5" stroke-dasharray="6 4">
+    <line x1="200" y1="100" x2="200" y2="300"/>
+    <line x1="420" y1="100" x2="420" y2="300"/>
+    <line x1="640" y1="100" x2="640" y2="300"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="200" y="30" font-weight="bold" fill="#d64545">寫入者 A</text>
+    <text x="200" y="47" font-size="12" fill="#d64545">synchronize_rcu()，重置 table</text>
+    <text x="420" y="30" font-weight="bold" fill="#d64545">寫入者 B</text>
+    <text x="420" y="47" font-size="12" fill="#d64545">synchronize_rcu()，重置 table</text>
+    <text x="640" y="30" font-weight="bold" fill="#d64545">寫入者 C</text>
+    <text x="640" y="47" font-size="12" fill="#d64545">synchronize_rcu()，重置 table</text>
+  </g>
+
+  <!-- writer A keeps waiting -->
+  <line x1="200" y1="76" x2="895" y2="76" stroke="#e08e0b" stroke-width="3" marker-end="url(#arrow-wait)"/>
+  <circle cx="200" cy="76" r="4" fill="#e08e0b"/>
+  <text x="548" y="69" text-anchor="middle" font-size="12" fill="#b86e00">寫入者 A 一直在等所有格子都變成 true，卻一直等不到</text>
+
+  <!-- lanes -->
+  <g font-weight="bold" fill="#444">
+    <text x="30" y="135">CPU 0</text>
+    <text x="30" y="185">CPU 1</text>
+    <text x="30" y="235">CPU 2</text>
+    <text x="30" y="285">CPU 3</text>
+  </g>
+  <g stroke="#cccccc" stroke-width="1.5">
+    <line x1="100" y1="130" x2="900" y2="130"/>
+    <line x1="100" y1="180" x2="900" y2="180"/>
+    <line x1="100" y1="230" x2="900" y2="230"/>
+    <line x1="100" y1="280" x2="900" y2="280"/>
+  </g>
+
+  <!-- QS dots -->
+  <g fill="#3bb273" stroke="#23834f">
+    <!-- between A and B: CPU 3 missing -->
+    <circle cx="260" cy="130" r="7"/>
+    <circle cx="380" cy="180" r="7"/>
+    <circle cx="320" cy="230" r="7"/>
+    <!-- between B and C: CPU 1 missing -->
+    <circle cx="530" cy="130" r="7"/>
+    <circle cx="600" cy="230" r="7"/>
+    <circle cx="470" cy="280" r="7"/>
+    <!-- after C: CPU 0 missing so far -->
+    <circle cx="700" cy="180" r="7"/>
+    <circle cx="830" cy="230" r="7"/>
+    <circle cx="760" cy="280" r="7"/>
+  </g>
+  <text x="880" y="135" font-size="14" fill="#888">…</text>
+
+  <!-- table snapshots -->
+  <g font-size="10" fill="#777" text-anchor="middle">
+    <text x="381" y="320">0</text><text x="407" y="320">1</text><text x="433" y="320">2</text><text x="459" y="320">3</text>
+    <text x="601" y="320">0</text><text x="627" y="320">1</text><text x="653" y="320">2</text><text x="679" y="320">3</text>
+    <text x="801" y="320">0</text><text x="827" y="320">1</text><text x="853" y="320">2</text><text x="879" y="320">3</text>
+  </g>
+  <g stroke="#999" stroke-width="1">
+    <!-- before B resets: T T T F -->
+    <rect x="368" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <rect x="394" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <rect x="420" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <rect x="446" y="326" width="26" height="22" fill="#eeeeee"/>
+    <!-- before C resets: T F T T -->
+    <rect x="588" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <rect x="614" y="326" width="26" height="22" fill="#eeeeee"/>
+    <rect x="640" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <rect x="666" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <!-- now: F T T T -->
+    <rect x="788" y="326" width="26" height="22" fill="#eeeeee"/>
+    <rect x="814" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <rect x="840" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+    <rect x="866" y="326" width="26" height="22" fill="#3bb273" fill-opacity="0.35"/>
+  </g>
+  <g font-size="12" text-anchor="middle" font-weight="bold">
+    <text x="381" y="341" fill="#23834f">T</text><text x="407" y="341" fill="#23834f">T</text><text x="433" y="341" fill="#23834f">T</text><text x="459" y="341" fill="#999">F</text>
+    <text x="601" y="341" fill="#23834f">T</text><text x="627" y="341" fill="#999">F</text><text x="653" y="341" fill="#23834f">T</text><text x="679" y="341" fill="#23834f">T</text>
+    <text x="801" y="341" fill="#999">F</text><text x="827" y="341" fill="#23834f">T</text><text x="853" y="341" fill="#23834f">T</text><text x="879" y="341" fill="#23834f">T</text>
+  </g>
+  <g font-size="12" text-anchor="middle">
+    <text x="420" y="368">B 重置前：只差 CPU 3</text>
+    <text x="640" y="368">C 重置前：只差 CPU 1</text>
+    <text x="840" y="368">目前：還差 CPU 0</text>
+  </g>
+
+  <!-- time axis -->
+  <line x1="100" y1="392" x2="900" y2="392" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="910" y="397" font-size="12" fill="#666">時間</text>
+
+  <!-- legend -->
+  <g font-size="12">
+    <circle cx="54" cy="432" r="7" fill="#3bb273" stroke="#23834f"/>
+    <text x="68" y="437">CPU 經過 QS，把自己的格子設成 true</text>
+    <line x1="330" y1="424" x2="330" y2="442" stroke="#d64545" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="342" y="437">新的寫入者把整個 table 重置成 false</text>
+    <rect x="610" y="425" width="22" height="16" fill="#3bb273" fill-opacity="0.35" stroke="#999"/>
+    <text x="640" y="437">table 在重置前一刻的狀態</text>
+  </g>
+</svg>

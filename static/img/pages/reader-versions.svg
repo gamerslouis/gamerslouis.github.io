@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" width="960" height="390"
+     font-family="'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', 'Helvetica Neue', Arial, sans-serif"
+     font-size="13" fill="#333">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="390" fill="#ffffff"/>
+
+  <!-- which object gp points to -->
+  <rect x="100" y="66" width="200" height="20" fill="#bbbbbb" fill-opacity="0.35" stroke="#999"/>
+  <rect x="300" y="66" width="600" height="20" fill="#4a90d9" fill-opacity="0.18" stroke="#2c6fb7"/>
+  <text x="200" y="81" text-anchor="middle" font-size="12" fill="#555">gp 指向 old</text>
+  <text x="600" y="81" text-anchor="middle" font-size="12" fill="#2c6fb7">gp 指向 new</text>
+
+  <!-- grace period band -->
+  <rect x="300" y="96" width="320" height="214" fill="#f5a623" fill-opacity="0.13"/>
+  <line x1="300" y1="96" x2="300" y2="310" stroke="#e08e0b" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <line x1="620" y1="96" x2="620" y2="310" stroke="#e08e0b" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="300" y="30" text-anchor="middle" font-weight="bold" fill="#b86e00">grace period 開始</text>
+  <text x="300" y="48" text-anchor="middle" font-size="12" fill="#b86e00">寫入者更新指標、註冊 kfree_rcu</text>
+  <text x="620" y="30" text-anchor="middle" font-weight="bold" fill="#b86e00">grace period 結束</text>
+  <text x="620" y="48" text-anchor="middle" font-size="12" fill="#b86e00">既有的讀取者都已離開，釋放 old</text>
+
+  <!-- lanes -->
+  <g font-weight="bold" fill="#444">
+    <text x="24" y="135">寫入者</text>
+    <text x="24" y="205">讀取者 1</text>
+    <text x="24" y="275">讀取者 2</text>
+  </g>
+  <g stroke="#cccccc" stroke-width="1.5">
+    <line x1="100" y1="130" x2="900" y2="130"/>
+    <line x1="100" y1="200" x2="900" y2="200"/>
+    <line x1="100" y1="270" x2="900" y2="270"/>
+  </g>
+
+  <!-- writer -->
+  <text x="290" y="118" text-anchor="end" font-size="12" fill="#b86e00">rcu_assign_pointer() + kfree_rcu()</text>
+  <path d="M300,121 L309,130 L300,139 L291,130 z" fill="#f5a623" stroke="#b86e00"/>
+  <rect x="613" y="123" width="14" height="14" fill="#d64545" stroke="#a83232"/>
+  <text x="634" y="158" font-size="12" fill="#a83232">kfree(old)</text>
+
+  <!-- reader 1: entered before the update, holds old -->
+  <rect x="130" y="189" width="450" height="22" rx="4" fill="#4a90d9" stroke="#2c6fb7"/>
+  <text x="355" y="205" text-anchor="middle" fill="#ffffff">critical section：p = gp，拿到 old，讀取 old-&gt;mtu</text>
+  <text x="355" y="232" text-anchor="middle" font-size="12" fill="#2c6fb7">指標更新前就進入，grace period 必須等它結束</text>
+
+  <!-- reader 2: entered after the update, holds new -->
+  <rect x="400" y="259" width="475" height="22" rx="4" fill="#4a90d9" stroke="#2c6fb7"/>
+  <text x="740" y="275" text-anchor="middle" fill="#ffffff">critical section：p = gp，拿到 new</text>
+  <text x="745" y="302" text-anchor="middle" font-size="12" fill="#2c6fb7">指標更新後才進入，grace period 不必等它</text>
+
+  <!-- time axis -->
+  <line x1="100" y1="334" x2="900" y2="334" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="910" y="339" font-size="12" fill="#666">時間</text>
+
+  <!-- legend -->
+  <g font-size="12">
+    <path d="M54,357 L63,366 L54,375 L45,366 z" fill="#f5a623" stroke="#b86e00"/>
+    <text x="72" y="371">寫入者更新指標</text>
+    <rect x="200" y="359" width="14" height="14" fill="#d64545" stroke="#a83232"/>
+    <text x="222" y="371">釋放 old</text>
+    <rect x="320" y="359" width="28" height="14" rx="3" fill="#4a90d9" stroke="#2c6fb7"/>
+    <text x="356" y="371">read-side critical section</text>
+    <rect x="560" y="359" width="28" height="14" fill="#f5a623" fill-opacity="0.25" stroke="#e08e0b" stroke-dasharray="4 3"/>
+    <text x="596" y="371">grace period</text>
+  </g>
+</svg>

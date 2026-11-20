@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="960" height="480"
+     font-family="'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', 'Helvetica Neue', Arial, sans-serif"
+     font-size="13" fill="#333">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="960" height="480" fill="#ffffff"/>
+
+  <!-- grace period band -->
+  <rect x="300" y="66" width="300" height="300" fill="#f5a623" fill-opacity="0.13"/>
+  <line x1="300" y1="66" x2="300" y2="366" stroke="#e08e0b" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <line x1="600" y1="66" x2="600" y2="366" stroke="#e08e0b" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="300" y="34" text-anchor="middle" font-weight="bold" fill="#b86e00">grace period 開始</text>
+  <text x="300" y="52" text-anchor="middle" font-size="12" fill="#b86e00">寫入者更新指標、開始等待</text>
+  <text x="600" y="34" text-anchor="middle" font-weight="bold" fill="#b86e00">grace period 結束</text>
+  <text x="600" y="52" text-anchor="middle" font-size="12" fill="#b86e00">所有 CPU 都經過 QS，可以 kfree(old)</text>
+
+  <!-- lane labels and lines -->
+  <g font-weight="bold" fill="#444">
+    <text x="30" y="115">CPU 0</text>
+    <text x="30" y="190">CPU 1</text>
+    <text x="30" y="265">CPU 2</text>
+    <text x="30" y="340">CPU 3</text>
+  </g>
+  <g stroke="#cccccc" stroke-width="1.5">
+    <line x1="100" y1="110" x2="900" y2="110"/>
+    <line x1="100" y1="185" x2="900" y2="185"/>
+    <line x1="100" y1="260" x2="900" y2="260"/>
+    <line x1="100" y1="335" x2="900" y2="335"/>
+  </g>
+
+  <!-- CPU 0: short reader before GP, writer starts GP, context switch QS -->
+  <rect x="130" y="99" width="100" height="22" rx="4" fill="#4a90d9" stroke="#2c6fb7"/>
+  <text x="312" y="99" text-anchor="start" font-size="12" fill="#b86e00">rcu_assign_pointer() + call_rcu()</text>
+  <path d="M300,101 L309,110 L300,119 L291,110 z" fill="#f5a623" stroke="#b86e00"/>
+  <circle cx="420" cy="110" r="7" fill="#3bb273" stroke="#23834f"/>
+  <text x="420" y="139" text-anchor="middle" font-size="12">context switch</text>
+
+  <!-- CPU 1: long reader that started before GP; GP must wait for it -->
+  <rect x="170" y="174" width="390" height="22" rx="4" fill="#4a90d9" stroke="#2c6fb7"/>
+  <text x="365" y="190" text-anchor="middle" fill="#ffffff">critical section：使用 old</text>
+  <text x="365" y="214" text-anchor="middle" font-size="12" fill="#2c6fb7">GP 開始前就進入，必須等它結束</text>
+  <circle cx="600" cy="185" r="7" fill="#3bb273" stroke="#23834f"/>
+  <text x="620" y="214" text-anchor="start" font-size="12">context switch（最後一個 QS）</text>
+
+  <!-- CPU 2: QS before GP start does not count; reader; then user mode -->
+  <circle cx="230" cy="260" r="7" fill="#bbbbbb" stroke="#888888"/>
+  <text x="230" y="289" text-anchor="middle" font-size="12" fill="#777">context switch（不算數）</text>
+  <rect x="340" y="249" width="90" height="22" rx="4" fill="#4a90d9" stroke="#2c6fb7"/>
+  <rect x="470" y="251" width="180" height="18" rx="3" fill="#3bb273" fill-opacity="0.18" stroke="#3bb273" stroke-dasharray="3 2"/>
+  <text x="535" y="265" text-anchor="middle" font-size="12" fill="#23834f">user mode</text>
+  <circle cx="470" cy="260" r="7" fill="#3bb273" stroke="#23834f"/>
+
+  <!-- CPU 3: idle across GP start; reader that starts during GP and outlives it -->
+  <rect x="180" y="326" width="340" height="18" rx="3" fill="#9b8fd1" fill-opacity="0.2" stroke="#9b8fd1" stroke-dasharray="3 2"/>
+  <text x="240" y="340" text-anchor="middle" font-size="12" fill="#6a5cb0">idle</text>
+  <circle cx="360" cy="335" r="7" fill="#3bb273" stroke="#23834f"/>
+  <rect x="550" y="324" width="310" height="22" rx="4" fill="#4a90d9" stroke="#2c6fb7"/>
+  <text x="730" y="340" text-anchor="middle" fill="#ffffff">critical section：使用 new</text>
+  <text x="730" y="364" text-anchor="middle" font-size="12" fill="#2c6fb7">GP 開始後才進入，不必等它</text>
+
+  <!-- time axis -->
+  <line x1="100" y1="392" x2="900" y2="392" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="910" y="397" font-size="12" fill="#666">時間</text>
+
+  <!-- legend -->
+  <g font-size="12">
+    <rect x="40" y="428" width="28" height="14" rx="3" fill="#4a90d9" stroke="#2c6fb7"/>
+    <text x="76" y="440">read-side critical section</text>
+
+    <circle cx="262" cy="435" r="7" fill="#3bb273" stroke="#23834f"/>
+    <text x="276" y="440">有效的 quiescent state</text>
+
+    <circle cx="442" cy="435" r="7" fill="#bbbbbb" stroke="#888888"/>
+    <text x="456" y="440">GP 開始前的 QS</text>
+
+    <path d="M592,426 L601,435 L592,444 L583,435 z" fill="#f5a623" stroke="#b86e00"/>
+    <text x="610" y="440">寫入者開始等待</text>
+
+    <rect x="728" y="428" width="28" height="14" fill="#f5a623" fill-opacity="0.25" stroke="#e08e0b" stroke-dasharray="4 3"/>
+    <text x="764" y="440">grace period</text>
+  </g>
+</svg>

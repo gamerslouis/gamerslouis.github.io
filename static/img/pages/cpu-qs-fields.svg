@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" width="960" height="460"
+     font-family="'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', 'Helvetica Neue', Arial, sans-serif"
+     font-size="12" fill="#333">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="460" fill="#ffffff"/>
+
+  <!-- event lines -->
+  <g stroke="#999" stroke-width="1.2" stroke-dasharray="5 4">
+    <line x1="290" y1="98" x2="290" y2="372"/>
+    <line x1="520" y1="98" x2="520" y2="372"/>
+    <line x1="680" y1="98" x2="680" y2="372"/>
+    <line x1="830" y1="98" x2="830" y2="372"/>
+  </g>
+  <line x1="400" y1="98" x2="400" y2="372" stroke="#d64545" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <!-- event labels -->
+  <g text-anchor="middle">
+    <circle cx="290" cy="26" r="10" fill="#333"/><text x="290" y="30" fill="#fff" font-weight="bold">A</text>
+    <text x="290" y="56" font-weight="bold" fill="#b86e00">kthread</text>
+    <text x="290" y="73" fill="#b86e00">rcu_gp_init()</text>
+
+    <circle cx="400" cy="26" r="10" fill="#d64545"/><text x="400" y="30" fill="#fff" font-weight="bold">B</text>
+    <text x="400" y="56" font-weight="bold" fill="#d64545">context switch</text>
+    <text x="400" y="73" fill="#d64545">不算數</text>
+
+    <circle cx="520" cy="26" r="10" fill="#333"/><text x="520" y="30" fill="#fff" font-weight="bold">C</text>
+    <text x="520" y="56" font-weight="bold" fill="#6a5cb0">tick → softirq</text>
+    <text x="520" y="73" fill="#6a5cb0">__note_gp_changes()</text>
+
+    <circle cx="680" cy="26" r="10" fill="#333"/><text x="680" y="30" fill="#fff" font-weight="bold">D</text>
+    <text x="680" y="56" font-weight="bold" fill="#23834f">context switch</text>
+    <text x="680" y="73" fill="#23834f">rcu_qs()</text>
+
+    <circle cx="830" cy="26" r="10" fill="#333"/><text x="830" y="30" fill="#fff" font-weight="bold">E</text>
+    <text x="830" y="56" font-weight="bold" fill="#6a5cb0">tick → softirq</text>
+    <text x="830" y="73" fill="#6a5cb0">rcu_report_qs_rdp()</text>
+  </g>
+
+  <!-- row labels -->
+  <g text-anchor="end" font-weight="bold" fill="#444">
+    <text x="196" y="124">葉節點的 gp_seq</text>
+    <text x="196" y="174">rdp-&gt;gp_seq</text>
+    <text x="196" y="224">cpu_no_qs.b.norm</text>
+    <text x="196" y="274">core_needs_qs</text>
+    <text x="196" y="324">qsmask 裡自己的 bit</text>
+  </g>
+
+  <!-- row 1: leaf gp_seq -->
+  <g stroke="#999">
+    <rect x="210" y="106" width="80"  height="28" fill="#eeeeee"/>
+    <rect x="290" y="106" width="640" height="28" fill="#4a90d9" fill-opacity="0.25"/>
+  </g>
+  <text x="250" y="124" text-anchor="middle">8</text>
+  <text x="610" y="124" text-anchor="middle" font-weight="bold" fill="#2c6fb7">9（新的一輪）</text>
+
+  <!-- row 2: rdp gp_seq -->
+  <g stroke="#999">
+    <rect x="210" y="156" width="310" height="28" fill="#eeeeee"/>
+    <rect x="520" y="156" width="410" height="28" fill="#4a90d9" fill-opacity="0.25"/>
+  </g>
+  <text x="365" y="174" text-anchor="middle">8（還不知道新的一輪）</text>
+  <text x="725" y="174" text-anchor="middle" font-weight="bold" fill="#2c6fb7">9</text>
+
+  <!-- row 3: norm -->
+  <g stroke="#999">
+    <rect x="210" y="206" width="310" height="28" fill="#eeeeee"/>
+    <rect x="520" y="206" width="160" height="28" fill="#f5a623" fill-opacity="0.4"/>
+    <rect x="680" y="206" width="250" height="28" fill="#eeeeee"/>
+  </g>
+  <text x="365" y="224" text-anchor="middle">false（上一輪留下的）</text>
+  <text x="600" y="224" text-anchor="middle" font-weight="bold" fill="#8a5300">true</text>
+  <text x="805" y="224" text-anchor="middle">false</text>
+
+  <!-- row 4: core_needs_qs -->
+  <g stroke="#999">
+    <rect x="210" y="256" width="310" height="28" fill="#eeeeee"/>
+    <rect x="520" y="256" width="310" height="28" fill="#f5a623" fill-opacity="0.4"/>
+    <rect x="830" y="256" width="100" height="28" fill="#eeeeee"/>
+  </g>
+  <text x="365" y="274" text-anchor="middle">false</text>
+  <text x="675" y="274" text-anchor="middle" font-weight="bold" fill="#8a5300">true</text>
+  <text x="880" y="274" text-anchor="middle">false</text>
+
+  <!-- row 5: qsmask bit -->
+  <g stroke="#999">
+    <rect x="210" y="306" width="80"  height="28" fill="#eeeeee"/>
+    <rect x="290" y="306" width="540" height="28" fill="#f5a623" fill-opacity="0.4"/>
+    <rect x="830" y="306" width="100" height="28" fill="#eeeeee"/>
+  </g>
+  <text x="250" y="324" text-anchor="middle">0</text>
+  <text x="560" y="324" text-anchor="middle" font-weight="bold" fill="#8a5300">1（等這顆 CPU 回報）</text>
+  <text x="880" y="324" text-anchor="middle">0</text>
+
+  <!-- time axis -->
+  <line x1="210" y1="358" x2="930" y2="358" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="936" y="362" font-size="11" fill="#666">時間</text>
+
+  <!-- notes -->
+  <g font-size="12">
+    <text x="30" y="398"><tspan fill="#d64545" font-weight="bold">B</tspan>：CPU 還沒察覺新的一輪，norm 是上一輪留下的 false，rcu_qs() 直接跳過，這次 context switch 不算進第 9 輪。</text>
+    <text x="30" y="420"><tspan font-weight="bold">C</tspan>：CPU 拿 rdp-&gt;gp_seq 跟葉節點比較，發現新的一輪，把 norm 與 core_needs_qs 設成 true。之後的 QS 才算數。</text>
+    <text x="30" y="442"><tspan font-weight="bold">D、E</tspan>：rcu_qs() 把 norm 清成 false；下一次 softirq 回報，清掉 qsmask 的 bit，並把 core_needs_qs 清成 false。</text>
+  </g>
+</svg>
